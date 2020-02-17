@@ -7,23 +7,128 @@
 
 using namespace std;
 
-Card::Card(string n,int c){
-			name=n;
-			cost=c;
-			isTapped=0;
+Card::Card(string n,type t,int c){
+	if(t==FOLLOWER){
+		switch(c){
+			case(0):
+				
+				cost=0;
+				break;
+			case(1):
+				
+				cost=0;
+				break;
+			case(2):
+				
+				cost=5;
+				break;
+			case(3):
+				
+				cost=3;
+				break;
+			case(4):
+				
+				cost=3;
+				break;
+			case(5):
+				
+				cost=8;
+				break;	
+		}
+	}else if(t==ITEM){
+		switch(c){
+			case(0):
+				
+				cost=0;
+				break;
+			case(1):
+				
+				cost=0;
+				break;
+			case(2):
+				
+				cost=2;
+				break;
+			case(3):
+				
+				cost=4;
+				break;
+			case(4):
+				
+				cost=8;
+				break;	
+		}
+	}else if(t==PERSONALITY){
+		switch(c){
+			case(0):
+				
+				cost=5;
+				break;
+			case(1):
+				
+				cost=5;
+				break;
+			case(2):
+				
+				cost=15;
+				break;
+			case(3):
+				
+				cost=15;
+				break;
+			case(4):
+				
+				cost=30;
+				break;	
+		}
+	}else if(t==HOLDING){	
+		switch(c){
+			case(0):
+				
+				cost=2;
+				break;
+			case(1):
+				
+				cost=2;
+				break;
+			case(2):
+				
+				cost=3;
+				break;
+			case(3):
+				
+				cost=5;
+				break;
+			case(4):
+				
+				cost=7;
+				break;
+			case(5):
+				
+				cost=12;
+				break;	
+			case(6):
+				
+				cost=0;
+		}
+	}
+	isTapped=0;
+	name=n;
+	cout << "card has a cost of " << cost << endl; 
 }
 		
-GreenCard::GreenCard(string n,int c):Card(n,c){
+GreenCard::GreenCard(string n,type t,int c):Card(n,t,c){
 }
 	
 	
-BlackCard::BlackCard(string n,int c):Card(n,c){
+BlackCard::BlackCard(string n,type t,int c):Card(n,t,c){
+	
 }
 
-Follower::Follower(string n,follower f){
+Follower::Follower(string n,follower f):GreenCard(n,FOLLOWER,f){
 	switch(f){
 		case(0):
-			GreenCard(n,0);
+			
 			attackBonus=2;
 			defenceBonus=0;
 			minimumHonour=1;
@@ -33,7 +138,7 @@ Follower::Follower(string n,follower f){
 			break;
 	
 		case(1):
-			GreenCard(n,0);
+	
 			attackBonus=0;
 			defenceBonus=2;
 			minimumHonour=1;
@@ -43,7 +148,7 @@ Follower::Follower(string n,follower f){
 			break;
 		
 		case(2):
-			GreenCard(n,5);
+			
 			attackBonus=3;
 			defenceBonus=3;
 			minimumHonour=2;
@@ -53,7 +158,7 @@ Follower::Follower(string n,follower f){
 			break;
 		
 		case(3):
-			GreenCard(n,3);
+			
 			attackBonus=4;
 			defenceBonus=2;
 			minimumHonour=3;
@@ -63,7 +168,7 @@ Follower::Follower(string n,follower f){
 			break;
 		
 		case(4):
-			GreenCard(n,3);
+		
 			attackBonus=2;
 			defenceBonus=4;
 			minimumHonour=3;
@@ -73,7 +178,7 @@ Follower::Follower(string n,follower f){
 			break;
 		
 		case(5):
-			GreenCard(n,8);
+			
 			attackBonus=8;
 			defenceBonus=8;
 			minimumHonour=6;
@@ -82,13 +187,13 @@ Follower::Follower(string n,follower f){
 			cardText="A card\n";
 			break;
 	}
-		cout << "Made a" << name << endl;
+		cout << "Made a " << name << endl;
 }
 
-Item::Item(string n,item i){
+Item::Item(string n,item i):GreenCard(n,ITEM,i){
 	switch(i){
 		case(0):
-			GreenCard(n,0);
+			
 			attackBonus=2;
 			defenceBonus=0;
 			minimumHonour=1;
@@ -99,7 +204,7 @@ Item::Item(string n,item i){
 			break;
 		
 		case(1):
-			GreenCard(n,0);
+			
 			attackBonus=0;
 			defenceBonus=2;
 			minimumHonour=1;
@@ -110,7 +215,7 @@ Item::Item(string n,item i){
 			break;
 		
 		case(2):
-			GreenCard(n,2);
+			
 			attackBonus=2;
 			defenceBonus=2;
 			minimumHonour=2;
@@ -121,7 +226,7 @@ Item::Item(string n,item i){
 			break;
 		
 		case(3):
-			GreenCard(n,4);
+			
 			attackBonus=3;
 			defenceBonus=3;
 			minimumHonour=3;
@@ -132,7 +237,7 @@ Item::Item(string n,item i){
 			break;
 		
 		case(4):
-			GreenCard(n,8);
+			
 			attackBonus=5;
 			defenceBonus=5;
 			minimumHonour=3;
@@ -142,13 +247,13 @@ Item::Item(string n,item i){
 			cardText="A card\n";
 			break;
 	}
-		cout << "Made a" << name << endl;	
+		cout << "Made a " << name << endl;	
 }
 
-Personality::Personality(string n,personality p){
+Personality::Personality(string n,personality p):BlackCard(n,PERSONALITY,p){
 	switch(p){
 		case(0):
-			BlackCard(n,5);
+			
 			isRevealed=0;
 			isDead=0;
 			attack=3;
@@ -157,7 +262,7 @@ Personality::Personality(string n,personality p){
 			break;
 		
 		case(1):
-			BlackCard(n,5);
+			
 			isRevealed=0;
 			isDead=0;
 			attack=2;
@@ -166,7 +271,7 @@ Personality::Personality(string n,personality p){
 			break;
 		
 		case(2):
-			BlackCard(n,15);
+			
 			isRevealed=0;
 			isDead=0;
 			attack=10;
@@ -175,7 +280,7 @@ Personality::Personality(string n,personality p){
 			break;
 		
 		case(3):
-			BlackCard(n,15);
+			
 			isRevealed=0;
 			isDead=0;
 			attack=5;
@@ -184,7 +289,7 @@ Personality::Personality(string n,personality p){
 			break;
 		
 		case(4):
-			BlackCard(n,30);
+			
 			isRevealed=0;
 			isDead=0;
 			attack=20;
@@ -192,14 +297,14 @@ Personality::Personality(string n,personality p){
 			honour=12;
 			break;
 	}
-		cout << "Made a" << name << endl;
+		cout << "Made a " << name << endl;
 		
 }
 
-Holding::Holding(string n,holding h){
+Holding::Holding(string n,holding h):BlackCard(n,HOLDING,h){
 	switch(h){
 		case(0):
-			BlackCard(n,2);
+			
 			isRevealed=0;
 			harvestValue=2;
 			upperHolding=NULL;
@@ -207,7 +312,7 @@ Holding::Holding(string n,holding h){
 			break;
 		
 		case(1):
-			BlackCard(n,2);
+			
 			isRevealed=0;
 			harvestValue=2;
 			upperHolding=NULL;
@@ -215,7 +320,7 @@ Holding::Holding(string n,holding h){
 			break;
 		
 		case(2):
-			BlackCard(n,3);
+			
 			isRevealed=0;
 			harvestValue=4;
 			upperHolding=NULL;
@@ -223,7 +328,7 @@ Holding::Holding(string n,holding h){
 			break;
 		
 		case(3):
-			BlackCard(n,5);
+			
 			isRevealed=0;
 			harvestValue=3;
 			upperHolding=NULL;
@@ -231,7 +336,7 @@ Holding::Holding(string n,holding h){
 			break;
 		
 		case(4):
-			BlackCard(n,7);
+			
 			isRevealed=0;
 			harvestValue=5;
 			upperHolding=NULL;
@@ -239,21 +344,18 @@ Holding::Holding(string n,holding h){
 			break;
 		
 		case(5):
-			BlackCard(n,12);
+			
 			isRevealed=0;
 			harvestValue=6;
 			upperHolding=NULL;
 			subHolding=NULL;
 			break;
 	}
-		cout << "Made a" << name << endl;
+		cout << "Made a " << name << endl;
 }
 
-Stronghold::Stronghold(string n,holding h){
-	if(h==0){
-		BlackCard(n,0);
+Stronghold::Stronghold(string n,holding h):BlackCard(n,HOLDING,h){
 		StartingHonour=5;
-		InitialDefense=5;
+		InitialDefence=5;
 		money=5;
-	}
 }

@@ -1,5 +1,6 @@
+#pragma once
 #include <iostream>
-
+#include "Card.hpp"
 
 class Holding:public BlackCard{
 	protected:
