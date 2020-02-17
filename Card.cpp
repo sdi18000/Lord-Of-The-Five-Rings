@@ -11,108 +11,109 @@ Card::Card(string n,type t,int c){
 	if(t==FOLLOWER){
 		switch(c){
 			case(0):
-				name=n;
+				
 				cost=0;
 				break;
 			case(1):
-				name=n;
+				
 				cost=0;
 				break;
 			case(2):
-				name=n;
+				
 				cost=5;
 				break;
 			case(3):
-				name=n;
+				
 				cost=3;
 				break;
 			case(4):
-				name=n;
+				
 				cost=3;
 				break;
 			case(5):
-				name=n;
+				
 				cost=8;
 				break;	
 		}
 	}else if(t==ITEM){
 		switch(c){
 			case(0):
-				name=n;
+				
 				cost=0;
 				break;
 			case(1):
-				name=n;
+				
 				cost=0;
 				break;
 			case(2):
-				name=n;
+				
 				cost=2;
 				break;
 			case(3):
-				name=n;
+				
 				cost=4;
 				break;
 			case(4):
-				name=n;
+				
 				cost=8;
 				break;	
 		}
 	}else if(t==PERSONALITY){
 		switch(c){
 			case(0):
-				name=n;
+				
 				cost=5;
 				break;
 			case(1):
-				name=n;
+				
 				cost=5;
 				break;
 			case(2):
-				name=n;
+				
 				cost=15;
 				break;
 			case(3):
-				name=n;
+				
 				cost=15;
 				break;
 			case(4):
-				name=n;
+				
 				cost=30;
 				break;	
 		}
 	}else if(t==HOLDING){	
 		switch(c){
 			case(0):
-				name=n;
+				
 				cost=2;
 				break;
 			case(1):
-				name=n;
+				
 				cost=2;
 				break;
 			case(2):
-				name=n;
+				
 				cost=3;
 				break;
 			case(3):
-				name=n;
+				
 				cost=5;
 				break;
 			case(4):
-				name=n;
+				
 				cost=7;
 				break;
 			case(5):
-				name=n;
+				
 				cost=12;
 				break;	
 			case(6):
-				name=n;
+				
 				cost=0;
 		}
 	}
 	isTapped=0;
+	name=n;
 	cout << "card has a cost of " << cost << endl; 
 }
 		
