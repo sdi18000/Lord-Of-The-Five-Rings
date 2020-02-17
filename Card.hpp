@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 enum type{PERSONALITY = 1, HOLDING, FOLLOWER, ITEM};
 enum personality{ATTACKER, DEFENDER, SHOGUN, CHANCELLOR, CHAMPION}; 
