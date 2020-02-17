@@ -13,17 +13,17 @@ Card::Card(string n,int c){
 			isTapped=0;
 }
 		
-GreenCard::GreenCard(string n,int c):Card(n,c){
+GreenCard::GreenCard(string n, cardType t, int c):Card(n,c){
 }
 	
 	
-BlackCard::BlackCard(string n,int c):Card(n,c){
+BlackCard::BlackCard(string n, cardType t, int c):Card(n,c){
 }
 
 Follower::Follower(string n,follower f){
 	switch(f){
 		case(0):
-			GreenCard(n,0);
+			GreenCard(n, FOLLOWER, 0);
 			attackBonus=2;
 			defenceBonus=0;
 			minimumHonour=1;
@@ -33,7 +33,7 @@ Follower::Follower(string n,follower f){
 			break;
 	
 		case(1):
-			GreenCard(n,0);
+			GreenCard(n, FOLLOWER, 0);
 			attackBonus=0;
 			defenceBonus=2;
 			minimumHonour=1;
@@ -43,7 +43,7 @@ Follower::Follower(string n,follower f){
 			break;
 		
 		case(2):
-			GreenCard(n,5);
+			GreenCard(n, FOLLOWER, 5);
 			attackBonus=3;
 			defenceBonus=3;
 			minimumHonour=2;
@@ -53,7 +53,7 @@ Follower::Follower(string n,follower f){
 			break;
 		
 		case(3):
-			GreenCard(n,3);
+			GreenCard(n, FOLLOWER, 3);
 			attackBonus=4;
 			defenceBonus=2;
 			minimumHonour=3;
@@ -63,7 +63,7 @@ Follower::Follower(string n,follower f){
 			break;
 		
 		case(4):
-			GreenCard(n,3);
+			GreenCard(n, FOLLOWER, 3);
 			attackBonus=2;
 			defenceBonus=4;
 			minimumHonour=3;
@@ -73,7 +73,7 @@ Follower::Follower(string n,follower f){
 			break;
 		
 		case(5):
-			GreenCard(n,8);
+			GreenCard(n, FOLLOWER, 8);
 			attackBonus=8;
 			defenceBonus=8;
 			minimumHonour=6;
@@ -88,7 +88,7 @@ Follower::Follower(string n,follower f){
 Item::Item(string n,item i){
 	switch(i){
 		case(0):
-			GreenCard(n,0);
+			GreenCard(n, ITEM, 0);
 			attackBonus=2;
 			defenceBonus=0;
 			minimumHonour=1;
@@ -99,7 +99,7 @@ Item::Item(string n,item i){
 			break;
 		
 		case(1):
-			GreenCard(n,0);
+			GreenCard(n, ITEM, 0);
 			attackBonus=0;
 			defenceBonus=2;
 			minimumHonour=1;
@@ -110,7 +110,7 @@ Item::Item(string n,item i){
 			break;
 		
 		case(2):
-			GreenCard(n,2);
+			GreenCard(n, ITEM, 2);
 			attackBonus=2;
 			defenceBonus=2;
 			minimumHonour=2;
@@ -121,7 +121,7 @@ Item::Item(string n,item i){
 			break;
 		
 		case(3):
-			GreenCard(n,4);
+			GreenCard(n, ITEM, 4);
 			attackBonus=3;
 			defenceBonus=3;
 			minimumHonour=3;
@@ -132,7 +132,7 @@ Item::Item(string n,item i){
 			break;
 		
 		case(4):
-			GreenCard(n,8);
+			GreenCard(n, ITEM, 8);
 			attackBonus=5;
 			defenceBonus=5;
 			minimumHonour=3;
@@ -148,7 +148,7 @@ Item::Item(string n,item i){
 Personality::Personality(string n,personality p){
 	switch(p){
 		case(0):
-			BlackCard(n,5);
+			BlackCard(n, PERSONALITY, 5);
 			isRevealed=0;
 			isDead=0;
 			attack=3;
@@ -157,7 +157,7 @@ Personality::Personality(string n,personality p){
 			break;
 		
 		case(1):
-			BlackCard(n,5);
+			BlackCard(n, PERSONALITY, 5);
 			isRevealed=0;
 			isDead=0;
 			attack=2;
@@ -166,7 +166,7 @@ Personality::Personality(string n,personality p){
 			break;
 		
 		case(2):
-			BlackCard(n,15);
+			BlackCard(n, PERSONALITY, 15);
 			isRevealed=0;
 			isDead=0;
 			attack=10;
@@ -175,7 +175,7 @@ Personality::Personality(string n,personality p){
 			break;
 		
 		case(3):
-			BlackCard(n,15);
+			BlackCard(n, PERSONALITY, 15);
 			isRevealed=0;
 			isDead=0;
 			attack=5;
@@ -184,7 +184,7 @@ Personality::Personality(string n,personality p){
 			break;
 		
 		case(4):
-			BlackCard(n,30);
+			BlackCard(n, PERSONALITY, 30);
 			isRevealed=0;
 			isDead=0;
 			attack=20;
@@ -199,7 +199,7 @@ Personality::Personality(string n,personality p){
 Holding::Holding(string n,holding h){
 	switch(h){
 		case(0):
-			BlackCard(n,2);
+			BlackCard(n, HOLDING, 2);
 			isRevealed=0;
 			harvestValue=2;
 			upperHolding=NULL;
@@ -207,15 +207,15 @@ Holding::Holding(string n,holding h){
 			break;
 		
 		case(1):
-			BlackCard(n,2);
-			isRevealed=0;
+			BlackCard(n, HOLDING, 2);
+			isRevealed=0;switch(f){
 			harvestValue=2;
 			upperHolding=NULL;
 			subHolding=NULL;
 			break;
 		
 		case(2):
-			BlackCard(n,3);
+			BlackCard(n, HOLDING, 3);
 			isRevealed=0;
 			harvestValue=4;
 			upperHolding=NULL;
@@ -223,7 +223,7 @@ Holding::Holding(string n,holding h){
 			break;
 		
 		case(3):
-			BlackCard(n,5);
+			BlackCard(n, HOLDING, 5);
 			isRevealed=0;
 			harvestValue=3;
 			upperHolding=NULL;
@@ -231,7 +231,7 @@ Holding::Holding(string n,holding h){
 			break;
 		
 		case(4):
-			BlackCard(n,7);
+			BlackCard(n, HOLDING, 7);
 			isRevealed=0;
 			harvestValue=5;
 			upperHolding=NULL;
@@ -239,7 +239,7 @@ Holding::Holding(string n,holding h){
 			break;
 		
 		case(5):
-			BlackCard(n,12);
+			BlackCard(n, HOLDING, 12);
 			isRevealed=0;
 			harvestValue=6;
 			upperHolding=NULL;
@@ -251,7 +251,7 @@ Holding::Holding(string n,holding h){
 
 Stronghold::Stronghold(string n,holding h){
 	if(h==0){
-		BlackCard(n,0);
+		BlackCard(n, HOLDING, 0);
 		StartingHonour=5;
 		InitialDefense=5;
 		money=5;
