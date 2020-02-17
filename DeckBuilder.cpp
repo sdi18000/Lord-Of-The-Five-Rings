@@ -19,11 +19,11 @@ DeckBuilder::~DeckBuilder()
 		delete *it;
 		it = black->begin();
 	}
-	for (it = green->begin(); it2 != green->end(); it++)
+	for (it2 = green->begin(); it2 != green->end(); it++)
 	{
-		green->remove((*it));
-		delete *it;
-		it = green->begin();
+		green->remove((*it2));
+		delete *it2;
+		it2 = green->begin();
 	}
 	delete black;
 	delete green;
@@ -90,7 +90,7 @@ list<BlackCard *> *DeckBuilder::createDynastyDeck()
 		black->push_back(new Holding("Ichinokawa Crystal Mine",CRYSTAL_MINE));
 	for (i = 0; i < NO_SOLO; i++)
 		black->push_back(new Holding("Gifts and Favors",SOLO));
-
+	black->push_back(new Holding("The Stronghold",STRONGHOLD));
 	return black;
 }
 
