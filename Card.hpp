@@ -12,7 +12,7 @@ class Card{
 		std::string name;
 		int isTapped;
 	public:
-		virtual type getType(void);
+		virtual type getType(void) = 0;
 		Card(std::string n,type t,int c);
 };
 
