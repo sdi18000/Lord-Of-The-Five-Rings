@@ -8,6 +8,7 @@
 using namespace std;
 
 Card::Card(string n,type t,int c){
+	this->t = t;
 	if(t==FOLLOWER){
 		switch(c){
 			case(0):
@@ -115,6 +116,10 @@ Card::Card(string n,type t,int c){
 	isTapped=0;
 	name=n;
 	cout << "card has a cost of " << cost << endl; 
+}
+
+type Card::getType(void){
+	return t;
 }
 		
 GreenCard::GreenCard(string n,type t,int c):Card(n,t,c){
