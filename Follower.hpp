@@ -12,4 +12,5 @@ class Follower:public GreenCard{
 		int effectCost;
 	public:
 		Follower(std::string n,follower f);
+		type getType();
 };

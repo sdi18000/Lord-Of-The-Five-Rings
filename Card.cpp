@@ -359,3 +359,24 @@ Stronghold::Stronghold(string n,holding h):BlackCard(n,HOLDING,h){
 		InitialDefence=5;
 		money=5;
 }
+type Follower::getType(){
+	return FOLLOWER;
+} 
+type Item::getType(){
+	return ITEM;
+} 
+type Personality::getType(){
+	return PERSONALITY;
+} 
+type Holding::getType(){
+	return HOLDING;
+} 
+//holding chain
+void Holding::connect(Holding* sh,Holding* uh=NULL){
+	if(sh!=NULL)
+		subHolding=sh;
+	if(uh!=NULL)
+		upperHolding=uh;
+}
+
+

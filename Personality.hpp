@@ -11,4 +11,5 @@ class Personality:public BlackCard{
 		int honour;
 	public:
 		Personality(std::string n,personality p);
+		type getType();
 };

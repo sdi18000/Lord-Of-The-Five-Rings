@@ -13,6 +13,7 @@ class Card{
 		int isTapped;
 	public:
 		Card(std::string n,type t,int c);
+		virtual type getType() =0;
 };
 
 
@@ -25,6 +26,7 @@ class GreenCard:public Card{
 class BlackCard:public Card{
 	public:
 		BlackCard(std::string n,type t,int c);
+		
 };
 
 

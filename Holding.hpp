@@ -10,4 +10,6 @@ class Holding:public BlackCard{
 		Holding* subHolding;
 	public:
 		Holding(std::string n,holding h);
+		type getType();
+		void connect(Holding* sh,Holding* uh);
 };
