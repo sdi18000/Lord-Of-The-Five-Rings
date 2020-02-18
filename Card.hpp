@@ -11,7 +11,6 @@ class Card{
 		int cost;
 		std::string name;
 		int isTapped;
-		type t;
 	public:
 		virtual type getType(void);
 		Card(std::string n,type t,int c);

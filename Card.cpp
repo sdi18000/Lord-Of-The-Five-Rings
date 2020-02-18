@@ -8,7 +8,6 @@
 using namespace std;
 
 Card::Card(string n,type t,int c){
-	this->t = t;
 	if(t==FOLLOWER){
 		switch(c){
 			case(0):
@@ -119,7 +118,7 @@ Card::Card(string n,type t,int c){
 }
 
 type Card::getType(void){
-	return t;
+	return ITEM;
 }
 		
 GreenCard::GreenCard(string n,type t,int c):Card(n,t,c){
@@ -363,4 +362,20 @@ Stronghold::Stronghold(string n,holding h):BlackCard(n,HOLDING,h){
 		StartingHonour=5;
 		InitialDefence=5;
 		money=5;
+}
+
+type Holding::getType(void){
+	return HOLDING;
+}
+
+type Personality::getType(void){
+	return PERSONALITY;
+}
+
+type Follower::getType(void){
+	return FOLLOWER;
+}
+
+type Item::getType(void){
+	return ITEM;
 }

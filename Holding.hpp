@@ -11,4 +11,5 @@ class Holding:public BlackCard{
 	public:
 		Holding(std::string n,holding h);
 		void connect(Holding &h);
+		virtual type getType(void);
 };

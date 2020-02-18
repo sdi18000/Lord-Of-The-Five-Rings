@@ -13,4 +13,5 @@ class Item:public GreenCard{
 		int durability;
 	public:
 		Item(std::string n,item i);
+		virtual type getType(void);
 };
