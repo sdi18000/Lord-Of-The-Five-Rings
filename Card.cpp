@@ -422,4 +422,5 @@ void Holding::updateHarvest(void){
 
 void Personality::equip(GreenCard* g,bool a){
 			gl.push_back(g);
+			b.push_back(a);
 		}
