@@ -302,6 +302,7 @@ Personality::Personality(string n,personality p):BlackCard(n,PERSONALITY,p){
 }
 
 Holding::Holding(string n,holding h):BlackCard(n,HOLDING,h){
+	holdingType = h;
 	switch(h){
 		case(0):
 			
@@ -371,12 +372,50 @@ type Personality::getType(){
 type Holding::getType(){
 	return HOLDING;
 } 
-//holding chain
-void Holding::connect(Holding* sh,Holding* uh=NULL){
-	if(sh!=NULL)
-		subHolding=sh;
-	if(uh!=NULL)
-		upperHolding=uh;
+
+int Holding::getHarvestValue(void){
+	return harvestValue;
 }
 
+//holding chain
+void Holding::connect(Holding* sh,Holding* uh){
+	if(sh!=NULL){
+		subHolding=sh;
+		sh->upperHolding = this;
+	}
+	if(uh!=NULL){
+		upperHolding=uh;
+		uh->subHolding = this;
+	}
+	updateHarvest();
+	if(subHolding != NULL) subHolding->updateHarvest();
+	if(upperHolding != NULL) upperHolding->updateHarvest();
+}
 
+void Holding::updateHarvest(void){
+	switch(holdingType){
+		case(MINE):
+			if(upperHolding != NULL){
+				harvestValue += 2;
+			}
+			break;
+		case(GOLD_MINE):
+			if(subHolding != NULL && upperHolding != NULL){
+				harvestValue += 2*harvestValue;
+			}else if(subHolding != NULL){
+				harvestValue += 4;
+			}else{
+				harvestValue += 5;
+			}
+			break;
+		case(CRYSTAL_MINE):
+			if(subHolding != NULL){
+				if(subHolding->subHolding != NULL){
+					harvestValue *= 3;
+				}else{
+					harvestValue *= 2;
+				}
+			}
+			break;
+	}
+}
