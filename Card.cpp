@@ -419,3 +419,8 @@ void Holding::updateHarvest(void){
 			break;
 	}
 }
+
+void Personality::equip(GreenCard* g,bool a){
+			gl.push_back(g);
+			b.push_back(a);
+}

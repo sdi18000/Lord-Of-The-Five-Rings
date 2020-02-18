@@ -125,5 +125,3 @@ void DeckBuilder::deckShuffler(list<GreenCard *> *green)
 	for (it2 = vect.begin(); it2 != vect.end(); it2++)
 		green->push_back((*it2));
 }
-
-
