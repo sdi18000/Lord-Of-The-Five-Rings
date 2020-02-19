@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+
 enum type{PERSONALITY = 1, HOLDING, FOLLOWER, ITEM};
 enum personality{ATTACKER, DEFENDER, SHOGUN, CHANCELLOR, CHAMPION}; 
 enum holding{PLAIN, MINE, GOLD_MINE, CRYSTAL_MINE, FARMS, SOLO, STRONGHOLD}; 
@@ -27,15 +28,4 @@ class BlackCard:public Card{
 	public:
 		BlackCard(std::string n,type t,int c);
 		
-};
-
-
-
-class Stronghold:public BlackCard{
-	protected:
-			int StartingHonour;
-			int InitialDefence;
-			int money;
-	public:
-		Stronghold(std::string n,holding h);
 };

@@ -58,11 +58,10 @@ class DeckBuilder
 		~DeckBuilder();
 		std::list<GreenCard *>* createFateDeck();
 	 	std::list<BlackCard *>* createDynastyDeck();
-
+	 	std::list<GreenCard *>* getFateDeck();
+	 	std::list<BlackCard *>* getDynastyDeck();
 	 	void deckShuffler(std::list<BlackCard *> *black);
 		void deckShuffler(std::list<GreenCard *> *green);
 };
 
 #endif
-
-
