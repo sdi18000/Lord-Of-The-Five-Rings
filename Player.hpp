@@ -13,10 +13,13 @@
 class Player{
 protected:
 	DeckBuilder *deck;
+	std::list<BlackCard *> provinces;
 	std::list<GreenCard *> hand;
 	std::list<Holding *> holdings;
 	std::list<Personality *> army;
 	int numOfProvinces;
+	int money;
 public:
-	Player(std::string n);
+	Player(std::string n,int i);
+	void printstats();
 };

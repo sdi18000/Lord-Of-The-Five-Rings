@@ -364,11 +364,6 @@ Holding::Holding(string n,holding h):BlackCard(n,HOLDING,h){
 		cout << "Made a " << name << endl;
 }
 
-Stronghold::Stronghold(string n,holding h):Holding(n, h){
-	srand(time(NULL));
-	StartingHonour= rand()%(maxHonour-minHonour+1)+minHonour;
-	InitialDefence=5;
-}
 type Follower::getType(){
 	return FOLLOWER;
 } 
