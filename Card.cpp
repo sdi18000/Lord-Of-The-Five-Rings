@@ -364,11 +364,6 @@ Holding::Holding(string n,holding h):BlackCard(n,HOLDING,h){
 		cout << "Made a " << name << endl;
 }
 
-Stronghold::Stronghold(string n,holding h):Holding(n, h){
-	srand(time(NULL));
-	StartingHonour= rand()%(maxHonour-minHonour+1)+minHonour;
-	InitialDefence=5;
-}
 type Follower::getType(){
 	return FOLLOWER;
 } 
@@ -432,4 +427,12 @@ void Holding::updateHarvest(void){
 void Personality::equip(GreenCard* g,bool a){
 			gl.push_back(g);
 			b.push_back(a);
+}
+
+void Card::tap(){
+	isTapped = 1;
+}
+		
+void Card::untap(){
+	isTapped = 0;
 }
