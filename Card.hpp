@@ -15,6 +15,8 @@ class Card{
 	public:
 		Card(std::string n,type t,int c);
 		virtual type getType() =0;
+		void tap();
+		void untap();
 };
 
 
@@ -25,7 +27,10 @@ class GreenCard:public Card{
 };
 
 class BlackCard:public Card{
+	protected:
+		int isRevealed;
 	public:
 		BlackCard(std::string n,type t,int c);
+		virtual void reveal(void);
 		
 };

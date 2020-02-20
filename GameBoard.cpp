@@ -28,3 +28,7 @@ void GameBoard::printGameStatistics(){
 			i++;
 		}
 }
+
+vector<Player *> GameBoard::getPlayers(){
+	return players;
+}	

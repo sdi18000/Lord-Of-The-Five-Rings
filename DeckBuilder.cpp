@@ -133,3 +133,9 @@ list<GreenCard *>* DeckBuilder::getFateDeck(){
 list<BlackCard *>* DeckBuilder::getDynastyDeck(){
 	return black;
 }
+
+GreenCard *DeckBuilder::drawFateCard(){
+	GreenCard *card = green->front();
+	green->pop_front();
+	return card;
+}

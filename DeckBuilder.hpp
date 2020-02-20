@@ -62,6 +62,7 @@ class DeckBuilder
 	 	std::list<BlackCard *>* getDynastyDeck();
 	 	void deckShuffler(std::list<BlackCard *> *black);
 		void deckShuffler(std::list<GreenCard *> *green);
+		GreenCard *drawFateCard();
 };
 
 #endif

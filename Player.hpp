@@ -22,4 +22,9 @@ protected:
 public:
 	Player(std::string n,int i);
 	void printstats();
+	void untapEverything();
+	void drawFateCard();
+	void revealProvinces();
+	void printHand();
+	void printProvinces();
 };

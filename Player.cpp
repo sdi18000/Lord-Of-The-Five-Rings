@@ -31,3 +31,35 @@ Player::Player(string n,int i){
 void Player::printstats(){
 	cout << " has " << hand.size() << " cards in their hand, " << numOfProvinces << " provinces, " << holdings.size() <<" holdings, " <<  army.size()  << " soldiers and " << money << " gold\n"; 
 }
+
+void Player::untapEverything(){
+	list<Holding *>::iterator it;
+	for(it = holdings.begin(); it != holdings.end(); it++){
+		(*it)->untap();
+	}
+
+	list<Personality *>::iterator it2;
+	for(it2 = army.begin(); it2 != army.end(); it2++){
+		(*it2)->untap();
+	}
+}
+
+void Player::drawFateCard(){
+	if(hand.size() != maxCards)
+		hand.push_back(deck->drawFateCard());
+}
+
+void Player::revealProvinces(){
+	list<BlackCard *>::iterator it;
+	for(it = provinces.begin(); it != provinces.end(); it++){
+		(*it)->reveal();
+	}
+}
+
+void Player::printHand(){
+
+}
+
+void Player::printProvinces(){
+
+}

@@ -3,12 +3,13 @@
 #include "TypeConverter.hpp"
 #include "Player.hpp"
 #include "Card.hpp"
+#include "GameManager.hpp"
 #include "GameBoard.hpp"
 
 using namespace std;
 
 
 int main(){
-  GameBoard game(2);
-  game.printGameStatistics();
+  GameManager gm(2);
+  gm.startingPhase();
 }

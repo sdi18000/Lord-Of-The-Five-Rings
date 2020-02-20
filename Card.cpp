@@ -428,3 +428,15 @@ void Personality::equip(GreenCard* g,bool a){
 			gl.push_back(g);
 			b.push_back(a);
 }
+
+void Card::tap(){
+	isTapped = 1;
+}
+		
+void Card::untap(){
+	isTapped = 0;
+}
+
+void BlackCard::reveal(){
+	isRevealed = 1;
+}
