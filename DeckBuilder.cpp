@@ -90,7 +90,7 @@ list<BlackCard *> *DeckBuilder::createDynastyDeck()
 		black->push_back(new Holding("Ichinokawa Crystal Mine",CRYSTAL_MINE));
 	for (i = 0; i < NO_SOLO; i++)
 		black->push_back(new Holding("Gifts and Favors",SOLO));
-	black->push_back(new Holding("The Stronghold",STRONGHOLD));
+
 	return black;
 }
 
@@ -126,4 +126,10 @@ void DeckBuilder::deckShuffler(list<GreenCard *> *green)
 		green->push_back((*it2));
 }
 
+list<GreenCard *>* DeckBuilder::getFateDeck(){
+	return green;
+}
 
+list<BlackCard *>* DeckBuilder::getDynastyDeck(){
+	return black;
+}

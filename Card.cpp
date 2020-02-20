@@ -4,6 +4,8 @@
 #include "Personality.hpp"
 #include "Holding.hpp"
 #include "Item.hpp"
+#include "Stronghold.hpp"
+#include <ctime>
 
 using namespace std;
 
@@ -351,14 +353,21 @@ Holding::Holding(string n,holding h):BlackCard(n,HOLDING,h){
 			upperHolding=NULL;
 			subHolding=NULL;
 			break;
+		case(6):
+		
+		isRevealed=0;
+		harvestValue=5;
+		upperHolding=NULL;
+		subHolding=NULL;
+		break;
 	}
 		cout << "Made a " << name << endl;
 }
 
-Stronghold::Stronghold(string n,holding h):BlackCard(n,HOLDING,h){
-		StartingHonour=5;
-		InitialDefence=5;
-		money=5;
+Stronghold::Stronghold(string n,holding h):Holding(n, h){
+	srand(time(NULL));
+	StartingHonour= rand()%(maxHonour-minHonour+1)+minHonour;
+	InitialDefence=5;
 }
 type Follower::getType(){
 	return FOLLOWER;
@@ -423,4 +432,4 @@ void Holding::updateHarvest(void){
 void Personality::equip(GreenCard* g,bool a){
 			gl.push_back(g);
 			b.push_back(a);
-		}
+}
