@@ -4,6 +4,7 @@
 #include "Player.hpp"
 #include "Card.hpp"
 #include "GameManager.hpp"
+#include "GameBoard.hpp"
 
 using namespace std;
 
