@@ -27,7 +27,10 @@ class GreenCard:public Card{
 };
 
 class BlackCard:public Card{
+	protected:
+		int isRevealed;
 	public:
 		BlackCard(std::string n,type t,int c);
+		virtual void reveal(void);
 		
 };

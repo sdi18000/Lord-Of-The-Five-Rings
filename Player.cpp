@@ -45,11 +45,15 @@ void Player::untapEverything(){
 }
 
 void Player::drawFateCard(){
-
+	if(hand.size() != maxCards)
+		hand.push_back(deck->drawFateCard());
 }
 
 void Player::revealProvinces(){
-
+	list<BlackCard *>::iterator it;
+	for(it = provinces.begin(); it != provinces.end(); it++){
+		(*it)->reveal();
+	}
 }
 
 void Player::printHand(){

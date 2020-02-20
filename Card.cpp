@@ -436,3 +436,7 @@ void Card::tap(){
 void Card::untap(){
 	isTapped = 0;
 }
+
+void BlackCard::reveal(){
+	isRevealed = 1;
+}

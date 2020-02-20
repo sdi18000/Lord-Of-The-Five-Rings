@@ -12,6 +12,8 @@ void GameManager::startingPhase(){
 	vector<Player *>::iterator it;
 	for(it = players.begin(); it != players.end(); it++){
 		(*it)->untapEverything();
+		(*it)->drawFateCard();
+		(*it)->revealProvinces();
 	}
 }
 
