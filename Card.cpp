@@ -437,7 +437,6 @@ void Card::untap(){
 	isTapped = 0;
 }
 void Holding::print(){
-
 	cout << "Holding: " << name << " with " << harvestValue << " harvest value and " << cost << " cost\n\n";
 	if(holdingType==MINE){
 		if(upperHolding!=NULL){
@@ -459,7 +458,6 @@ void Holding::print(){
 }
 
 void Personality::print(){
-
 	cout << "Personality: " << name << " with " << attack << " attack, "<< defence << " defence, "<< honour << " honour and "<< cost << " cost\n";
 	cout << "Its followers and items are: ";
 	list <GreenCard*>::iterator it;
@@ -468,7 +466,6 @@ void Personality::print(){
 			(*it)->print();
 		}
 	}
-
 	cout << endl << endl;
 }
 
@@ -478,14 +475,6 @@ void Follower::print(){
 
 void Item::print(){
 	cout << "Item: " << name << " with " << attackBonus << " attackbonus, "<< defenceBonus << " defencebonus, "<< minimumHonour << " minimumHonour, \n" << effectBonus << " effectbonus, " << effectCost << " effectcost, " << durability << " durability and " << cost << " cost\n\n";
-}
-
-void Follower::print(){
-	cout << "Follower: "<< name << " with " << attackBonus << " attackbonus, "<< defenceBonus << " defencebonus, "<< minimumHonour << " minimumHonour, " << effectBonus << " effectbonus, " << effectCost << " effectcost and " << cost << "cost\n";
-}
-
-void Item::print(){
-	cout << "Item: " << name << " with " << attackBonus << " attackbonus, "<< defenceBonus << " defencebonus, "<< minimumHonour << " minimumHonour, " << effectBonus << " effectbonus, " << effectCost << " effectcost, " << durability << " durability and " << cost << "cost\n";
 }
 
 

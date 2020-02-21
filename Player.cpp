@@ -79,6 +79,7 @@ void Player::printProvinces(){
 }
 
 void Player::printArena(){
+	cout << "Your Army:" << endl << endl;
 	list<Personality*>::iterator it;
 	if(army.size()!=0){
 		for(it=army.begin();it!=army.end();it++){
@@ -94,4 +95,12 @@ void Player::printHoldings(){
 			(*it)->print();
 		}
 	}
+}
+
+list<GreenCard *> Player::getHand(){
+	return hand;
+}
+
+list<Personality *> Player::getArmy(){
+	return army;
 }
