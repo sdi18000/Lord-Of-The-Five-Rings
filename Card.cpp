@@ -437,7 +437,8 @@ void Card::untap(){
 	isTapped = 0;
 }
 void Holding::print(){
-	cout << "Holding: " << name << " with " << harvestValue << " harvest value and " << cost << "cost\n";
+
+	cout << "Holding: " << name << " with " << harvestValue << " harvest value and " << cost << " cost\n\n";
 	if(holdingType==MINE){
 		if(upperHolding!=NULL){
 			cout << " and is connected with " << upperHolding->name << " with harvest value " << upperHolding->harvestValue << " and " << upperHolding->cost << "cost\n";
@@ -447,7 +448,7 @@ void Holding::print(){
 				cout << " and is connected with " << subHolding->name << " with harvest value " << subHolding->harvestValue << " and "<< subHolding->cost << " cost " << " and "<< upperHolding->name << " with harvest value " << upperHolding->harvestValue << " and "<< upperHolding->cost << " cost\n";              
 		}else if(subHolding != NULL){
 				cout << " and is connected with " << subHolding->name << " with harvest value " << subHolding->harvestValue << " and " << subHolding->cost << "cost\n";
-		}else{
+		}else if(upperHolding != NULL){
 				cout << " and is connected with " << upperHolding->name << " with harvest value " << upperHolding->harvestValue << " and " << upperHolding->cost << "cost\n";
 		}
 	}else if(holdingType==CRYSTAL_MINE){
@@ -458,7 +459,8 @@ void Holding::print(){
 }
 
 void Personality::print(){
-	cout << "Personality: " << name << " with " << attack << " attack, "<< defence << " defence, "<< honour << " honour and "<< cost << "cost\n";
+
+	cout << "Personality: " << name << " with " << attack << " attack, "<< defence << " defence, "<< honour << " honour and "<< cost << " cost\n";
 	cout << "Its followers and items are: ";
 	list <GreenCard*>::iterator it;
 	if(gl.size()!=0){
@@ -466,6 +468,16 @@ void Personality::print(){
 			(*it)->print();
 		}
 	}
+
+	cout << endl << endl;
+}
+
+void Follower::print(){
+	cout << "Follower: "<< name << " with " << attackBonus << " attackbonus, "<< defenceBonus << " defencebonus, "<< minimumHonour << " minimumHonour, \n" << effectBonus << " effectbonus, " << effectCost << " effectcost and " << cost << " cost\n\n";
+}
+
+void Item::print(){
+	cout << "Item: " << name << " with " << attackBonus << " attackbonus, "<< defenceBonus << " defencebonus, "<< minimumHonour << " minimumHonour, \n" << effectBonus << " effectbonus, " << effectCost << " effectcost, " << durability << " durability and " << cost << " cost\n\n";
 }
 
 void Follower::print(){
