@@ -14,4 +14,5 @@ class Item:public GreenCard{
 	public:
 		Item(std::string n,item i);
 		type getType();
+		void print();
 };

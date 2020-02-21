@@ -11,5 +11,6 @@ using namespace std;
 
 int main(){
   GameManager gm(2);
+  cout << endl << "Game has started" << endl << endl;
   gm.startingPhase();
 }

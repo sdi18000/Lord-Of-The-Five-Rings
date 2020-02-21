@@ -15,4 +15,5 @@ class Holding:public BlackCard{
 		Holding(std::string n,holding h);
 		type getType();
 		void connect(Holding* sh,Holding* uh = NULL);
+		void print();
 };

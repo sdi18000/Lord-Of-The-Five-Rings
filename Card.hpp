@@ -15,6 +15,7 @@ class Card{
 	public:
 		Card(std::string n,type t,int c);
 		virtual type getType() =0;
+		virtual void print() =0;
 		void tap();
 		void untap();
 };

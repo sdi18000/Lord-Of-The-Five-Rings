@@ -16,7 +16,7 @@ protected:
 	std::list<BlackCard *> provinces;
 	std::list<GreenCard *> hand;
 	std::list<Holding *> holdings;
-	std::list<Personality *> army;
+	std::list<Personality*> army;
 	int numOfProvinces;
 	int money;
 public:
@@ -27,4 +27,6 @@ public:
 	void revealProvinces();
 	void printHand();
 	void printProvinces();
+	void printArena();
+	void printHoldings();
 };
