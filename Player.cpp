@@ -45,8 +45,7 @@ void Player::untapEverything(){
 }
 
 void Player::drawFateCard(){
-	if(hand.size() != maxCards)
-		hand.push_back(deck->drawFateCard());
+	hand.push_back(deck->drawFateCard());
 }
 
 void Player::revealProvinces(){
@@ -57,9 +56,37 @@ void Player::revealProvinces(){
 }
 
 void Player::printHand(){
-
+	list<GreenCard*>::iterator it;
+	if(hand.size()!=0){
+		for(it=hand.begin();it!=hand.end();it++){
+			(*it)->print();
+		}
+	}
 }
 
 void Player::printProvinces(){
+	list<BlackCard*>::iterator it;
+	if(provinces.size()!=0){
+		for(it=provinces.begin();it!=provinces.end();it++){
+			(*it)->print();
+		}
+	}
+}
 
+void Player::printArena(){
+	list<Personality*>::iterator it;
+	if(army.size()!=0){
+		for(it=army.begin();it!=army.end();it++){
+			(*it)->print();
+		}
+	}
+}
+
+void Player::printHoldings(){
+	list<Holding*>::iterator it;
+	if(holdings.size()!=0){
+		for(it=holdings.begin();it!=holdings.end();it++){
+			(*it)->print();
+		}
+	}
 }

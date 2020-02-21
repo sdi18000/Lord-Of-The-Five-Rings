@@ -13,4 +13,5 @@ class Follower:public GreenCard{
 	public:
 		Follower(std::string n,follower f);
 		type getType();
+		void print();
 };

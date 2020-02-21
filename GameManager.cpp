@@ -18,7 +18,7 @@ void GameManager::startingPhase(){
 }
 
 void GameManager::equipPhase(){
-
+	
 }
 
 void GameManager::battlePhase(){

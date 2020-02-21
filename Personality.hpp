@@ -16,6 +16,6 @@ class Personality:public BlackCard{
 		Personality(std::string n,personality p);
 		type getType();
 		void equip(GreenCard* g,bool a);
-		
+		void print();
 		
 };

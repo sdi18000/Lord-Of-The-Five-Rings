@@ -11,6 +11,7 @@ GameBoard::GameBoard(int n){
 		string p="Player ";
 		a=to_string(o+1);
 		p=p+a;
+		p=p+" Stronghold";
 		players.push_back(new Player(p,l));
 		l++;
 		
