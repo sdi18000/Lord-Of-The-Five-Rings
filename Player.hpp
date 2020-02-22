@@ -29,4 +29,6 @@ public:
 	void printProvinces();
 	void printArena();
 	void printHoldings();
+	std::list<GreenCard *> getHand();
+	std::list<Personality *> getArmy();
 };

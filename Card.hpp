@@ -18,6 +18,7 @@ class Card{
 		virtual void print() =0;
 		void tap();
 		void untap();
+		std::string getName();
 };
 
 
