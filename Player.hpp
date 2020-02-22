@@ -15,10 +15,11 @@ protected:
 	DeckBuilder *deck;
 	std::list<BlackCard *> provinces;
 	std::list<GreenCard *> hand;
-	std::list<Holding *> holdings;
 	std::list<Personality*> army;
+	std::list<Holding *> holdings;
 	int numOfProvinces;
 	int money;
+
 public:
 	Player(std::string n,int i);
 	void printstats();
@@ -29,6 +30,16 @@ public:
 	void printProvinces();
 	void printArena();
 	void printHoldings();
+	void printMoney();
+	void printHonour();
 	std::list<GreenCard *> getHand();
 	std::list<Personality *> getArmy();
+	void pay(int amount);
+	bool affords(Card *c);
+	bool affords(int cost);
+	void buy(Card *c);
+	void receive(int amount);
+	int getHonour();
+	Stronghold *getStronghold();
+	void removeFromHand(GreenCard *card);
 };
