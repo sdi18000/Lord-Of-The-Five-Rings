@@ -481,3 +481,7 @@ void Item::print(){
 void BlackCard::reveal(){
 	isRevealed = 1;
 }
+
+string Card::getName(){
+	return name;
+}

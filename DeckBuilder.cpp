@@ -101,7 +101,6 @@ void DeckBuilder::deckShuffler(list<BlackCard *> *black)
 	for (it = black->begin(); it != black->end(); it++)
 		vect.push_back((*it));
 
-	srand(time(NULL));
 	random_shuffle(vect.begin(), vect.end());
 
 	black->clear();
@@ -118,7 +117,6 @@ void DeckBuilder::deckShuffler(list<GreenCard *> *green)
 	for (it = green->begin(); it != green->end(); it++)
 		vect.push_back((*it));
 
-	srand(time(NULL));
 	random_shuffle(vect.begin(), vect.end());
 
 	green->clear();

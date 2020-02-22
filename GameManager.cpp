@@ -30,6 +30,7 @@ void GameManager::equipPhase(){
 	int p = 1;
 	for(player = players.begin(); player != players.end(); player++){
 		cout << "Player " << p << "'s turn" << endl << endl;
+		p++;
 		(*player)->printHand();
 		(*player)->printArena();
 
@@ -42,6 +43,10 @@ void GameManager::equipPhase(){
 		vector<Personality *> vect2;
 		list<Personality *>::iterator it2;
 		list<Personality *> army = (*player)->getArmy();
+		if(army.empty()){
+			cout << "Army is empty" << endl << endl;
+			continue;
+		}
 		for (it2 = army.begin(); it2 != army.end(); it2++)
 			vect2.push_back((*it2));
 
@@ -69,9 +74,41 @@ void GameManager::equipPhase(){
 					continue;
 				}
 				selected_card->print();
+				cin >> selection;
+				if(selection == "done"){
+					finished = true;
+				}else{
+					Personality *per;
+					try{
+						int index = stoi(selection);
+						try{
+							per = vect2.at(index);
+						}catch(out_of_range e){
+							cout << "Choose a valid card" << endl;
+							continue;
+						}
+					}catch(out_of_range e){
+						cout << "Invalid input, try again" << endl;
+						continue;
+					}catch(invalid_argument){
+						cout << "Invalid input, try again" << endl;
+						continue;
+					}
+					per->print();
+					cout << "Do you want to upgrade " + selected_card->getName() + "?" << endl;
+					string choice;
+					cin >> choice;
+					if(choice == "Yes" || choice == "yes"){
+						per->equip(selected_card,1);
+					}else if(choice == "No" || choice == "no"){
+						per->equip(selected_card,0);
+					}else{
+						cout << "Invalid input, try again" << endl;
+						continue;
+					}
+				}
 			}
 		}
-		p++;
 	}
 }
 
