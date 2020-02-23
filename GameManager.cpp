@@ -1,5 +1,6 @@
 #include <iostream>
 #include "GameManager.hpp"
+#include <algorithm>
 
 using namespace std;
 
@@ -31,8 +32,7 @@ void GameManager::equipPhase(){
 	for(player = players.begin(); player != players.end(); player++){
 		cout << "Player " << p << "'s turn" << endl << endl;
 		p++;
-		(*player)->printHand();
-		(*player)->printArena();
+		//(*player)->army.push_back(new Personality("Hida Shozen",ATTACKER)); -for testing-
 
 		vector<GreenCard *> vect;
 		list<GreenCard *>::iterator it;
@@ -53,13 +53,18 @@ void GameManager::equipPhase(){
 		bool finished = false;
 		string selection;
 		while(!finished){
+			(*player)->printHand();
+			(*player)->printArena();
+			(*player)->printMoney();
+			int refund = 0;
+			cout << "Choose card from hand or 'done' to end turn" << endl;
 			cin >> selection;
 			if(selection == "done"){
 				finished = true;
 			}else{
 				GreenCard *selected_card;
 				try{
-					int index = stoi(selection);
+					int index = stoi(selection)-1;
 					try{
 						selected_card = vect.at(index);
 					}catch(out_of_range e){
@@ -73,36 +78,72 @@ void GameManager::equipPhase(){
 					cout << "Invalid input, try again" << endl;
 					continue;
 				}
+				cout << "You have selected:" << endl;
 				selected_card->print();
+				if((*player)->affords(selected_card) == false){
+					cout << "Not enough money" << endl;
+					continue;
+				}
+				(*player)->buy(selected_card);
+				refund += (selected_card->getCost());
+				cout << "Choose card from army or 'cancel' to cancel" << endl;
 				cin >> selection;
-				if(selection == "done"){
-					finished = true;
+				if(selection == "cancel"){
+					(*player)->receive(refund);
+					continue;
 				}else{
 					Personality *per;
 					try{
-						int index = stoi(selection);
+						int index = stoi(selection)-1;
 						try{
 							per = vect2.at(index);
 						}catch(out_of_range e){
+							(*player)->receive(refund);
 							cout << "Choose a valid card" << endl;
 							continue;
 						}
 					}catch(out_of_range e){
+						(*player)->receive(refund);
 						cout << "Invalid input, try again" << endl;
 						continue;
 					}catch(invalid_argument){
+						(*player)->receive(refund);
 						cout << "Invalid input, try again" << endl;
 						continue;
 					}
+					cout << "You have selected:" << endl;
 					per->print();
+					if(per->canEquip() == false){
+						(*player)->receive(refund);
+						cout << per->getName() << " can't equip any more cards" << endl;
+						continue;
+					}
+					if(per->HonouredEnough(selected_card) == false){
+						(*player)->receive(refund);
+						cout << per->getName() << " not honoured enough" << endl;
+						continue;
+					}
 					cout << "Do you want to upgrade " + selected_card->getName() + "?" << endl;
 					string choice;
 					cin >> choice;
 					if(choice == "Yes" || choice == "yes"){
-						per->equip(selected_card,1);
+						if((*player)->affords(selected_card->getEffectCost())){
+							(*player)->pay(selected_card->getEffectCost());
+							cout << "Upgraded and equipped " + selected_card->getName() << endl;
+							per->equip(selected_card,1);
+							(*player)->removeFromHand(selected_card);
+							vect.erase(remove(vect.begin(), vect.end(), selected_card), vect.end());
+						}else{
+							(*player)->receive(refund);
+							cout << "Not enough money for upgrade" << endl;
+						}
 					}else if(choice == "No" || choice == "no"){
+						cout << "Equipped " + selected_card->getName() << endl;
 						per->equip(selected_card,0);
+						(*player)->removeFromHand(selected_card);
+						vect.erase(remove(vect.begin(), vect.end(), selected_card), vect.end());
 					}else{
+						(*player)->receive(refund);
 						cout << "Invalid input, try again" << endl;
 						continue;
 					}

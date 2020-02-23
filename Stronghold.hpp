@@ -10,4 +10,5 @@ class Stronghold:public Holding{
 		int InitialDefence;
 	public:
 		Stronghold(std::string n,holding h,int i);
+		int getHonour();
 };

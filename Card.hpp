@@ -19,13 +19,24 @@ class Card{
 		void tap();
 		void untap();
 		std::string getName();
+		int getCost();
 };
 
 
 
 class GreenCard:public Card{
+	protected:
+		int attackBonus;
+		int defenceBonus;
+		int effectBonus;
+		int effectCost;
+		int minimumHonour;
+		bool upgraded;
 	public:
 		GreenCard(std::string n,type t,int c);
+		void upgrade();
+		int getEffectCost();
+		int getMinHonour();
 };
 
 class BlackCard:public Card{
@@ -33,6 +44,5 @@ class BlackCard:public Card{
 		int isRevealed;
 	public:
 		BlackCard(std::string n,type t,int c);
-		virtual void reveal(void);
-		
+		virtual void reveal(void);	
 };

@@ -97,10 +97,52 @@ void Player::printHoldings(){
 	}
 }
 
+void Player::printMoney(){
+	cout << "You have " << money << " gold" << endl;
+}
+
+void Player::printHonour(){
+	cout << "You have " << getHonour() << " honour" << endl;
+}
+
 list<GreenCard *> Player::getHand(){
 	return hand;
 }
 
 list<Personality *> Player::getArmy(){
 	return army;
+}
+
+void Player::pay(int amount){
+	money -= amount;
+}
+
+bool Player::affords(Card *c){
+	if(money >= c->getCost()) return true;
+	return false;
+}
+
+bool Player::affords(int cost){
+	if(money >= cost) return true;
+	return false;
+}
+
+void Player::buy(Card *c){
+	pay(c->getCost());
+}
+
+void Player::receive(int amount){
+	money += amount;
+}
+
+int Player::getHonour(){
+	return getStronghold()->getHonour();
+}
+
+Stronghold *Player::getStronghold(){
+	Stronghold *str = (Stronghold *)(holdings.front());
+}
+
+void Player::removeFromHand(GreenCard *card){
+	hand.remove(card);
 }

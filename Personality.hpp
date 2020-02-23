@@ -3,6 +3,8 @@
 #include "Card.hpp"
 #include <list>
 
+#define maxGreenCards 3
+
 class Personality:public BlackCard{
 	protected:
 		int isRevealed;
@@ -17,5 +19,7 @@ class Personality:public BlackCard{
 		type getType();
 		void equip(GreenCard* g,bool a);
 		void print();
-		
+		int getHonour();
+		bool canEquip();
+		bool HonouredEnough(GreenCard *card);
 };

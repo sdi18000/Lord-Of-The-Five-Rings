@@ -120,6 +120,7 @@ Card::Card(string n,type t,int c){
 }
 		
 GreenCard::GreenCard(string n,type t,int c):Card(n,t,c){
+	upgraded = false;
 }
 	
 	
@@ -424,9 +425,18 @@ void Holding::updateHarvest(void){
 	}
 }
 
+void GreenCard::upgrade(){
+	upgraded = true;
+}
+
 void Personality::equip(GreenCard* g,bool a){
-			gl.push_back(g);
-			b.push_back(a);
+	if(a == true) g->upgrade();
+	gl.push_back(g);
+}
+
+bool Personality::canEquip(){
+	if(gl.size() < 3) return true;
+	return false;
 }
 
 void Card::tap(){
@@ -436,6 +446,28 @@ void Card::tap(){
 void Card::untap(){
 	isTapped = 0;
 }
+
+int Card::getCost(){
+	return cost;
+}
+
+int GreenCard::getEffectCost(){
+	return effectCost;
+}
+
+int GreenCard ::getMinHonour(){
+	return minimumHonour;
+}
+
+int Personality::getHonour(){
+	return honour;
+}
+
+bool Personality::HonouredEnough(GreenCard *card){
+	if(getHonour() >= card->getMinHonour()) return true;
+	return false;
+}
+
 void Holding::print(){
 	cout << "Holding: " << name << " with " << harvestValue << " harvest value and " << cost << " cost\n\n";
 	if(holdingType==MINE){
@@ -470,10 +502,16 @@ void Personality::print(){
 }
 
 void Follower::print(){
+	if(upgraded == true){
+		cout << "Upgraded ";
+	}
 	cout << "Follower: "<< name << " with " << attackBonus << " attackbonus, "<< defenceBonus << " defencebonus, "<< minimumHonour << " minimumHonour, \n" << effectBonus << " effectbonus, " << effectCost << " effectcost and " << cost << " cost\n\n";
 }
 
 void Item::print(){
+	if(upgraded == true){
+		cout << "Upgraded ";
+	}
 	cout << "Item: " << name << " with " << attackBonus << " attackbonus, "<< defenceBonus << " defencebonus, "<< minimumHonour << " minimumHonour, \n" << effectBonus << " effectbonus, " << effectCost << " effectcost, " << durability << " durability and " << cost << " cost\n\n";
 }
 
