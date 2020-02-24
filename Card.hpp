@@ -20,6 +20,7 @@ class Card{
 		void untap();
 		std::string getName();
 		int getCost();
+		int tapped();
 };
 
 
@@ -44,5 +45,6 @@ class BlackCard:public Card{
 		int isRevealed;
 	public:
 		BlackCard(std::string n,type t,int c);
-		virtual void reveal(void);	
+		virtual void reveal(void);
+		int revealed();
 };

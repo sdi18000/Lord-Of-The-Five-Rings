@@ -7,7 +7,7 @@
 
 class Personality:public BlackCard{
 	protected:
-		int isRevealed;
+		//int isRevealed;
 		int isDead;
 		int attack;
 		int defence;

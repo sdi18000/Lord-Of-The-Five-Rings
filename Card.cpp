@@ -520,6 +520,14 @@ void BlackCard::reveal(){
 	isRevealed = 1;
 }
 
+int BlackCard::revealed(){
+	return isRevealed;
+}
+
 string Card::getName(){
 	return name;
+}
+
+int Card::tapped(){
+	return isTapped;
 }

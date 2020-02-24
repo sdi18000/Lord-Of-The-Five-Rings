@@ -32,7 +32,7 @@ void GameManager::equipPhase(){
 	for(player = players.begin(); player != players.end(); player++){
 		cout << "Player " << p << "'s turn" << endl << endl;
 		p++;
-		//(*player)->army.push_back(new Personality("Hida Shozen",ATTACKER)); -for testing-
+		//(*player)->getArmy().push_back(new Personality("Hida Shozen",ATTACKER));// -for testing-
 
 		vector<GreenCard *> vect;
 		list<GreenCard *>::iterator it;
@@ -166,13 +166,35 @@ void GameManager::battlePhase(){
 }
 
 void GameManager::economyPhase(){
-	// cout << "Equip Phase" << endl << endl;
-	// vector<Player *> players = gb->getPlayers();
-	// vector<Player *>::iterator it;
-	// int p = 1;
-	// for(it = players.begin(); it != players.end(); it++){
-	// 	cout << "Player " << p << "'s turn" << endl << endl;
-		
-	// 	p++;
-	// }
+	cout << "Economy Phase" << endl << endl;
+	vector<Player *> players = gb->getPlayers();
+	vector<Player *>::iterator player;
+	int p = 1;
+	for(player = players.begin(); player != players.end(); player++){
+		cout << "Player " << p << "'s turn" << endl << endl;
+		p++;
+		int money = (*player)->getMoney();
+		bool finished = false;
+		while(!finished){
+			(*player)->printProvinces();
+			(*player)->printHoldings();
+			cout << "'Buy' to buy a province, 'Tap' to tap a holding or 'done' to stop" << endl;
+			cout << "You have " << money << " gold" << endl;
+			string input;
+			cin >> input;
+			if(input == "tap" || input == "Tap"){
+				money += (*player)->tapHoldings();
+			}else if(input == "buy" || input == "Buy"){
+				int cost = (*player)->chooseProvince(money);
+				if(money-(*player)->getMoney() < cost){
+					(*player)->pay(money-cost);
+				}
+				money -= cost;
+			}else if(input == "done" || input == "Done"){
+				finished = true;
+			}else{
+				cout << "Invalid input, try again" << endl;
+			}
+		}
+	}
 }

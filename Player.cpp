@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Player.hpp"
+#include "TypeConverter.hpp"
 
 using namespace std;
 
@@ -73,7 +74,9 @@ void Player::printProvinces(){
 	list<BlackCard*>::iterator it;
 	if(provinces.size()!=0){
 		for(it=provinces.begin();it!=provinces.end();it++){
-			(*it)->print();
+			if((*it)->revealed()){
+				(*it)->print();
+			}
 		}
 	}
 }
@@ -89,10 +92,12 @@ void Player::printArena(){
 }
 
 void Player::printHoldings(){
+	cout << "Your Holdings:" << endl << endl;
 	list<Holding*>::iterator it;
 	if(holdings.size()!=0){
 		for(it=holdings.begin();it!=holdings.end();it++){
-			(*it)->print();
+			if((*it)->tapped() == false)
+				(*it)->print();
 		}
 	}
 }
@@ -101,15 +106,19 @@ void Player::printMoney(){
 	cout << "You have " << money << " gold" << endl;
 }
 
+int Player::getMoney(){
+	return money;
+}
+
 void Player::printHonour(){
 	cout << "You have " << getHonour() << " honour" << endl;
 }
 
-list<GreenCard *> Player::getHand(){
+list<GreenCard *> &Player::getHand(){
 	return hand;
 }
 
-list<Personality *> Player::getArmy(){
+list<Personality *> &Player::getArmy(){
 	return army;
 }
 
@@ -145,4 +154,100 @@ Stronghold *Player::getStronghold(){
 
 void Player::removeFromHand(GreenCard *card){
 	hand.remove(card);
+}
+
+int Player::tapHoldings(){
+	vector<Holding *> vect;
+	list<Holding *>::iterator it;
+	for (it = holdings.begin(); it != holdings.end(); it++)
+		vect.push_back((*it));
+
+	bool finished = false;
+	cout << "Choose cards to tap, 'done' to stop:" << endl;
+	printHoldings();
+	string selection;
+	int income = 0;
+	int cards_selected = 0;
+	while(!finished){
+		cin >> selection;
+		if(selection == "done" || selection == "Done"){
+			finished = true;
+		}else{
+			Holding *hold;
+			try{
+				int index = stoi(selection)-1;
+				try{
+					hold = vect.at(index);
+				}catch(out_of_range e){
+					cout << "Choose a valid card" << endl;
+					continue;
+				}
+			}catch(out_of_range e){
+				cout << "Invalid input, try again" << endl;
+				continue;
+			}catch(invalid_argument e){
+				cout << "Invalid input, try again" << endl;
+				continue;
+			}
+			if(hold->tapped()){
+				cout << hold->getName() << " is already tapped" << endl;
+				continue;
+			}
+			cout << hold->getName() << " selected" << endl;
+			cout << '(' << ++cards_selected << '/' << holdings.size() << ')' << endl; 
+			hold->tap();
+			income += hold->getHarvestValue();
+		}
+	}
+	return income;
+}
+
+int Player::chooseProvince(int money){
+	vector<BlackCard *> vect;
+	list<BlackCard *>::iterator it;
+	for (it = provinces.begin(); it != provinces.end(); it++)
+		vect.push_back((*it));
+
+	bool finished = false;
+	while(!finished){
+		cout << "Select Province or 'cancel':" << endl;
+		printProvinces();
+		string selection;
+		cin >> selection;
+		if(selection == "Cancel" || selection == "cancel"){
+			finished = true;
+		}else{
+			try{
+				int index = stoi(selection)-1;
+				try{
+					BlackCard *prov = vect.at(index);
+					if(prov->getCost() > money){
+						cout << "Can't afford " << prov->getName() << endl;
+						continue;
+					}
+					provinces.remove(prov);
+					TypeConverter *conv = new TypeConverter();
+					Personality **per;
+					Holding **hold;
+					conv->getCorrectType(prov, per, hold);
+					if(per){
+						army.push_back(*per);
+					}else{
+						holdings.push_back(*hold);
+					}
+					return prov->getCost();
+				}catch(out_of_range e){
+					cout << "Choose a valid card" << endl;
+					continue;
+				}
+			}catch(out_of_range e){
+				cout << "Invalid input, try again" << endl;
+				continue;
+			}catch(invalid_argument e){
+				cout << "Invalid input, try again" << endl;
+				continue;
+			}
+		}
+	}
+	return 0;
 }

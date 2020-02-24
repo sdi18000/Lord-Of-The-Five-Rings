@@ -4,7 +4,7 @@
 
 class Holding:public BlackCard{
 	protected:
-		int isRevealed;
+		//int isRevealed;
 		int harvestValue;
 		Holding* upperHolding;
 		Holding* subHolding;
