@@ -230,10 +230,11 @@ int Player::chooseProvince(int money){
 					Personality **per;
 					Holding **hold;
 					conv->getCorrectType(prov, per, hold);
-					if(per){
+					if(*per){
 						army.push_back(*per);
-					}else{
+					}else if(*hold){
 						holdings.push_back(*hold);
+						printHoldings(); //to remove
 					}
 					return prov->getCost();
 				}catch(out_of_range e){
@@ -250,4 +251,41 @@ int Player::chooseProvince(int money){
 		}
 	}
 	return 0;
+}
+
+void Player::discardSurplusFateCards(){
+	if(hand.size() > maxCards){
+		vector<GreenCard *> vect;
+		list<GreenCard *>::iterator it;
+		for (it = hand.begin(); it != hand.end(); it++)
+			vect.push_back((*it));
+
+		bool finished = false;
+		string selection;
+		while(!finished){
+			printHand();
+			int refund = 0;
+			cout << "Choose card to discard" << endl;
+			cin >> selection;
+			GreenCard *selected_card;
+			try{
+				int index = stoi(selection)-1;
+				try{
+					selected_card = vect.at(index);
+				}catch(out_of_range e){
+					cout << "Choose a valid card" << endl;
+					continue;
+				}
+			}catch(out_of_range e){
+				cout << "Invalid input, try again" << endl;
+				continue;
+			}catch(invalid_argument){
+				cout << "Invalid input, try again" << endl;
+				continue;
+			}
+			cout << selected_card->getName() << " will be discarded" << endl;
+			hand.remove(selected_card);
+			finished = true;
+		}
+	}
 }

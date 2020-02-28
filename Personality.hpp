@@ -13,7 +13,6 @@ class Personality:public BlackCard{
 		int defence;
 		int honour;
 		std::list<GreenCard*> gl;
-		std::list<bool> b;
 	public:
 		Personality(std::string n,personality p);
 		type getType();

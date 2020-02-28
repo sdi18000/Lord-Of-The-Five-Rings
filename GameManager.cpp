@@ -154,15 +154,7 @@ void GameManager::equipPhase(){
 }
 
 void GameManager::battlePhase(){
-	// cout << "Equip Phase" << endl << endl;
-	// vector<Player *> players = gb->getPlayers();
-	// vector<Player *>::iterator it;
-	// int p = 1;
-	// for(it = players.begin(); it != players.end(); it++){
-	// 	cout << "Player " << p << "'s turn" << endl << endl;
-		
-	// 	p++;
-	// }
+	
 }
 
 void GameManager::economyPhase(){
@@ -186,6 +178,7 @@ void GameManager::economyPhase(){
 				money += (*player)->tapHoldings();
 			}else if(input == "buy" || input == "Buy"){
 				int cost = (*player)->chooseProvince(money);
+				(*player)->printHoldings(); //to remove
 				if(money-(*player)->getMoney() < cost){
 					(*player)->pay(money-cost);
 				}
@@ -197,4 +190,21 @@ void GameManager::economyPhase(){
 			}
 		}
 	}
+}
+
+void GameManager::lastPhase(){
+	cout << "Last Phase" << endl << endl;
+	vector<Player *> players = gb->getPlayers();
+	vector<Player *>::iterator it;
+	int p = 1;
+	for(it = players.begin(); it != players.end(); it++){
+		cout << "Player " << p << "'s turn" << endl << endl;
+		(*it)->discardSurplusFateCards();
+		(*it)->printProvinces();
+		(*it)->printHand();
+		(*it)->printHoldings();
+		(*it)->printArena();
+		p++;
+	}
+	gb->printGameStatistics();
 }

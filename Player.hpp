@@ -45,4 +45,5 @@ public:
 	void removeFromHand(GreenCard *card);
 	int tapHoldings();
 	int chooseProvince(int money);
+	void discardSurplusFateCards();
 };
