@@ -11,4 +11,5 @@ public:
 	void battlePhase();
 	void economyPhase();
 	void lastPhase();
+	Player *checkWinningCondition();
 };

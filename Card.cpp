@@ -383,14 +383,34 @@ int Holding::getHarvestValue(void){
 }
 
 //holding chain
-void Holding::connect(Holding* sh,Holding* uh){
-	if(sh!=NULL){
-		subHolding=sh;
-		sh->upperHolding = this;
+void Holding::connect(Holding* hold){
+	if(hold->upperHolding != NULL || hold->subHolding != NULL){
+		return;
 	}
-	if(uh!=NULL){
-		upperHolding=uh;
-		uh->subHolding = this;
+	holding type = hold->holdingType;
+	switch(holdingType){
+		case(MINE):
+			if(upperHolding == NULL && type == GOLD_MINE){
+				upperHolding = hold;
+				hold->subHolding = this;
+			}
+			break;
+		case(GOLD_MINE):
+			if(upperHolding == NULL && type == CRYSTAL_MINE){
+				upperHolding = hold;
+				hold->subHolding = this;
+			}
+			if(subHolding == NULL && type == MINE){
+				subHolding = hold;
+				hold->upperHolding = this;
+			}
+			break;
+		case(CRYSTAL_MINE):
+			if(subHolding == NULL && type == GOLD_MINE){
+				subHolding = hold;
+				hold->upperHolding = this;
+			}
+			break;
 	}
 	updateHarvest();
 	if(subHolding != NULL) subHolding->updateHarvest();
@@ -409,7 +429,7 @@ void Holding::updateHarvest(void){
 				harvestValue += 2*harvestValue;
 			}else if(subHolding != NULL){
 				harvestValue += 4;
-			}else{
+			}else if(upperHolding != NULL){
 				harvestValue += 5;
 			}
 			break;
@@ -469,7 +489,6 @@ bool Personality::HonouredEnough(GreenCard *card){
 }
 
 void Holding::print(){
-	cout << "HOLDING PRINT" << endl;
 	cout << "Holding: " << name << " with " << harvestValue << " harvest value and " << cost << " cost\n\n";
 	if(holdingType==MINE){
 		if(upperHolding!=NULL){
@@ -477,21 +496,20 @@ void Holding::print(){
 		}
 	}else if(holdingType==GOLD_MINE){
 		if(subHolding != NULL && upperHolding != NULL){
-				cout << " and is connected with " << subHolding->name << " with harvest value " << subHolding->harvestValue << " and "<< subHolding->cost << " cost " << " and "<< upperHolding->name << " with harvest value " << upperHolding->harvestValue << " and "<< upperHolding->cost << " cost\n";              
+				cout << " and is connected with " << subHolding->name << " with harvest value " << subHolding->harvestValue << " and "<< subHolding->cost << " cost " << " and "<< upperHolding->name << " with harvest value " << upperHolding->harvestValue << " and "<< upperHolding->cost << " cost\n\n";              
 		}else if(subHolding != NULL){
-				cout << " and is connected with " << subHolding->name << " with harvest value " << subHolding->harvestValue << " and " << subHolding->cost << "cost\n";
+				cout << " and is connected with " << subHolding->name << " with harvest value " << subHolding->harvestValue << " and " << subHolding->cost << "cost\n\n";
 		}else if(upperHolding != NULL){
-				cout << " and is connected with " << upperHolding->name << " with harvest value " << upperHolding->harvestValue << " and " << upperHolding->cost << "cost\n";
+				cout << " and is connected with " << upperHolding->name << " with harvest value " << upperHolding->harvestValue << " and " << upperHolding->cost << "cost\n\n";
 		}
 	}else if(holdingType==CRYSTAL_MINE){
 		if(subHolding != NULL){
-				cout << " and is connected with " << subHolding->name << " with harvest value " << subHolding->harvestValue << " and " << subHolding->cost << "cost\n";
+				cout << " and is connected with " << subHolding->name << " with harvest value " << subHolding->harvestValue << " and " << subHolding->cost << "cost\n\n";
 		}
 	}
 }
 
 void Personality::print(){
-	cout << "PERSONALITY PRINT" << endl;
 	cout << "Personality: " << name << " with " << attack << " attack, "<< defence << " defence, "<< honour << " honour and "<< cost << " cost\n";
 	cout << "Its followers and items are: ";
 	list <GreenCard*>::iterator it;
@@ -504,7 +522,6 @@ void Personality::print(){
 }
 
 void Follower::print(){
-	cout << "FOLLOWER PRINT" << endl;
 	if(upgraded == true){
 		cout << "Upgraded ";
 	}
@@ -512,7 +529,6 @@ void Follower::print(){
 }
 
 void Item::print(){
-	cout << "ITEM PRINT" << endl;
 	if(upgraded == true){
 		cout << "Upgraded ";
 	}

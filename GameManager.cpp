@@ -207,3 +207,17 @@ void GameManager::lastPhase(){
 	}
 	gb->printGameStatistics();
 }
+
+Player *GameManager::checkWinningCondition(){
+	vector<Player *> players = gb->getPlayers();
+	vector<Player *>::iterator it;
+	for(it = players.begin(); it != players.end(); it++){
+		if((*it)->getNumOfProvinces() == 0){
+			players.erase(it);	
+		}
+	}
+	if(players.size() == 1){
+		return players.front();
+	}
+	return nullptr;
+}

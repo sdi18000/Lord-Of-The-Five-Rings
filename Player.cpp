@@ -51,6 +51,11 @@ void Player::drawFateCard(){
 	hand.push_back(deck->drawFateCard());
 }
 
+void Player::drawDynastyCard(){
+	cout << "Drawing Dynasty Card" << endl << endl;
+	provinces.push_back(deck->drawDynastyCard());
+}
+
 void Player::revealProvinces(){
 	cout << "Revealing Provinces" << endl << endl;
 	list<BlackCard *>::iterator it;
@@ -96,8 +101,8 @@ void Player::printHoldings(){
 	list<Holding*>::iterator it;
 	if(holdings.size()!=0){
 		for(it=holdings.begin();it!=holdings.end();it++){
-			if((*it)->tapped() == false)
-				(*it)->print();
+			(*it)->print();
+			if((*it)->tapped()) cout << "[Tapped]" << endl << endl;
 		}
 	}
 }
@@ -226,6 +231,7 @@ int Player::chooseProvince(int money){
 						continue;
 					}
 					provinces.remove(prov);
+					drawDynastyCard();
 					TypeConverter *conv = new TypeConverter();
 					Personality **per = new Personality *;
 					Holding **hold = new Holding *;
@@ -233,6 +239,10 @@ int Player::chooseProvince(int money){
 					if(*per){
 						army.push_back(*per);
 					}else if(*hold){
+						list<Holding *>::iterator h;
+						for(h = holdings.begin(); h != holdings.end(); h++){
+							(*hold)->connect(*h);
+						}
 						holdings.push_back(*hold);
 					}
 					return prov->getCost();
@@ -287,4 +297,8 @@ void Player::discardSurplusFateCards(){
 			finished = true;
 		}
 	}
+}
+
+int Player::getNumOfProvinces(){
+	return numOfProvinces;
 }

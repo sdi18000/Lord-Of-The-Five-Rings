@@ -25,6 +25,7 @@ public:
 	void printstats();
 	void untapEverything();
 	void drawFateCard();
+	void drawDynastyCard();
 	void revealProvinces();
 	void printHand();
 	void printProvinces();
@@ -46,4 +47,5 @@ public:
 	int tapHoldings();
 	int chooseProvince(int money);
 	void discardSurplusFateCards();
+	int getNumOfProvinces();
 };

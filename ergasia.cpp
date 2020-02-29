@@ -10,11 +10,15 @@ using namespace std;
 
 
 int main(){
-  GameManager gm(2);
-  cout << endl << "Game has started" << endl << endl;
-  gm.startingPhase();
-  gm.equipPhase();
-  gm.battlePhase();
-  gm.economyPhase();
-  gm.lastPhase();
+	GameManager gm(2);
+	cout << endl << "Game has started" << endl << endl;
+	Player *winner = nullptr;
+	while(winner == nullptr){
+		gm.startingPhase();
+		gm.equipPhase();
+		gm.battlePhase();
+		gm.economyPhase();
+		gm.lastPhase();
+		winner = gm.checkWinningCondition();
+    }
 }
