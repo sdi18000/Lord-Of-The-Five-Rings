@@ -469,6 +469,7 @@ bool Personality::HonouredEnough(GreenCard *card){
 }
 
 void Holding::print(){
+	cout << "HOLDING PRINT" << endl;
 	cout << "Holding: " << name << " with " << harvestValue << " harvest value and " << cost << " cost\n\n";
 	if(holdingType==MINE){
 		if(upperHolding!=NULL){
@@ -490,6 +491,7 @@ void Holding::print(){
 }
 
 void Personality::print(){
+	cout << "PERSONALITY PRINT" << endl;
 	cout << "Personality: " << name << " with " << attack << " attack, "<< defence << " defence, "<< honour << " honour and "<< cost << " cost\n";
 	cout << "Its followers and items are: ";
 	list <GreenCard*>::iterator it;
@@ -502,6 +504,7 @@ void Personality::print(){
 }
 
 void Follower::print(){
+	cout << "FOLLOWER PRINT" << endl;
 	if(upgraded == true){
 		cout << "Upgraded ";
 	}
@@ -509,6 +512,7 @@ void Follower::print(){
 }
 
 void Item::print(){
+	cout << "ITEM PRINT" << endl;
 	if(upgraded == true){
 		cout << "Upgraded ";
 	}

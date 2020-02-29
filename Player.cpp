@@ -227,14 +227,13 @@ int Player::chooseProvince(int money){
 					}
 					provinces.remove(prov);
 					TypeConverter *conv = new TypeConverter();
-					Personality **per;
-					Holding **hold;
+					Personality **per = new Personality *;
+					Holding **hold = new Holding *;
 					conv->getCorrectType(prov, per, hold);
 					if(*per){
 						army.push_back(*per);
 					}else if(*hold){
 						holdings.push_back(*hold);
-						printHoldings(); //to remove
 					}
 					return prov->getCost();
 				}catch(out_of_range e){

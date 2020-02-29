@@ -178,7 +178,6 @@ void GameManager::economyPhase(){
 				money += (*player)->tapHoldings();
 			}else if(input == "buy" || input == "Buy"){
 				int cost = (*player)->chooseProvince(money);
-				(*player)->printHoldings(); //to remove
 				if(money-(*player)->getMoney() < cost){
 					(*player)->pay(money-cost);
 				}
