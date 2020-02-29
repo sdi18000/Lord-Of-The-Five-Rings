@@ -8,12 +8,13 @@ class Holding:public BlackCard{
 		int harvestValue;
 		Holding* upperHolding;
 		Holding* subHolding;
-		void updateHarvest(void);
 		holding holdingType;
 	public:
 		int getHarvestValue(void);
 		Holding(std::string n,holding h);
 		type getType();
-		void connect(Holding* sh,Holding* uh = NULL);
+		void connect(Holding* hold);
 		void print();
+		int isdead();
+		void updateHarvest(void);
 };

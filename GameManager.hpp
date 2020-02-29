@@ -10,4 +10,6 @@ public:
 	void equipPhase();
 	void battlePhase();
 	void economyPhase();
+	void lastPhase();
+	Player *checkWinningCondition();
 };

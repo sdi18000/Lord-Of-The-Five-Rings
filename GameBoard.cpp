@@ -32,6 +32,6 @@ void GameBoard::printGameStatistics(){
 		}
 }
 
-vector<Player *> GameBoard::getPlayers(){
+vector<Player *>& GameBoard::getPlayers(){
 	return players;
 }	

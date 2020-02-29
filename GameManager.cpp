@@ -32,7 +32,7 @@ void GameManager::equipPhase(){
 	for(player = players.begin(); player != players.end(); player++){
 		cout << "Player " << p << "'s turn" << endl << endl;
 		p++;
-		//(*player)->army.push_back(new Personality("Hida Shozen",ATTACKER)); -for testing-
+		((*player)->getArmy()).push_back(new Personality("Hida Shozen",ATTACKER)); 
 
 		vector<GreenCard *> vect;
 		list<GreenCard *>::iterator it;
@@ -154,25 +154,183 @@ void GameManager::equipPhase(){
 }
 
 void GameManager::battlePhase(){
-	// cout << "Equip Phase" << endl << endl;
-	// vector<Player *> players = gb->getPlayers();
-	// vector<Player *>::iterator it;
-	// int p = 1;
-	// for(it = players.begin(); it != players.end(); it++){
-	// 	cout << "Player " << p << "'s turn" << endl << endl;
+	 cout << "Battle Phase" << endl << endl;
+	 vector<Player *> players = gb->getPlayers();
+	 vector<Player *>::iterator it;
+	 int p = 1;
+	 for(it = players.begin(); it != players.end(); it++){
+	 	cout << "Player " << p << "'s turn" << endl << endl;	
+		p++;
 		
-	// 	p++;
-	// }
+		vector<GreenCard *> vect;
+		list<GreenCard *>::iterator it3;
+		list<GreenCard *> hand = (*it)->getHand();
+		for (it3 = hand.begin(); it3 != hand.end(); it3++)
+			vect.push_back((*it3));
+		
+	 	vector<Personality *> vect2;
+		list<Personality *>::iterator it2;
+		list<Personality *> army = (*it)->getArmy();
+		if(army.empty()){
+			cout << "Army is empty" << endl << endl;
+			continue;
+		}
+		for (it2 = army.begin(); it2 != army.end(); it2++)
+			vect2.push_back((*it2));
+	 	
+		
+		bool finished=false;
+		string selection;
+		(*it)->printArena();
+		cin >> selection;
+		cout << "Select the army you want for attack(type done or DONE when ready):\n";
+		while(!finished){
+			if(selection=="done" || selection=="DONE"){
+				finished=true;
+			}else{
+				Personality* per;
+				try{
+						int index = stoi(selection)-1;
+						try{
+							per = vect2.at(index);
+						}catch(out_of_range e){
+							cout << "Choose a valid card" << endl;
+							continue;
+						}
+					}catch(out_of_range e){
+						cout << "Invalid input, try again" << endl;
+						continue;
+					}catch(invalid_argument){
+						cout << "Invalid input, try again" << endl;
+						continue;
+					}
+					cout << "You have selected:\n";
+					per->print();
+					per->tap();
+					((*it)->getattackArmy()).push_back(per);
+					cout << "Added " + per->getName() + " to your attack army\n";
+			}
+		}
+	}
+	p=0;
+	for(it = players.begin(); it != players.end(); it++){
+		p++;
+		if(((*it)->getattackArmy()).empty()){
+	 		cout << "Player " << p << " has no attack army" << endl << endl;
+	 		continue;
+	 	}
+	 	cout << "Player " << p << " please select the opponent you want to attack:\n" << endl;
+	 	string selection;
+	 	bool finished=false;
+	 	while(!finished){
+		 	cin >> selection;
+		 	int index;
+		 	try{
+					index = stoi(selection)-1;
+					try{
+						(*it)->setenemy(players.at(index));
+					}catch(out_of_range e){
+						cout << "Choose a valid card" << endl;
+						continue;
+					}
+				}catch(out_of_range e){
+					cout << "Invalid input, try again" << endl;
+					continue;
+				}catch(invalid_argument){
+					cout << "Invalid input, try again" << endl;
+					continue;
+				}
+				(*it)->setenemynum(index);
+				finished=true;
+		}
+	}
+	p=0;
+	for(it = players.begin(); it != players.end(); it++){		
+		p++;
+		if(((*it)->getattackArmy()).empty()){
+	 		cout << "Player " << p << " has no attack army" << endl << endl;
+	 		continue;
+	 	}
+	 	if((*it)->getnumofprov()==0){
+	 		cout << "Player " << p <<" has no provinces\n\n";
+	 		continue;
+		}
+	 	if((*((*it)->getenemy())).getnumofprov()==0){
+	 		cout << "Player " << p <<" 's attack to Player "<< (*it)->getenemynum()<< "is cancelled because enemy has no provinces\n\n";
+	 		continue;
+		}
+		cout << "Player " << p << " attacks Player " << (*it)->getenemynum() << endl;
+		(*it)->attack(*((*it)->getenemy()));
+			
+	}
+	
 }
 
+
+
+
 void GameManager::economyPhase(){
-	// cout << "Equip Phase" << endl << endl;
-	// vector<Player *> players = gb->getPlayers();
-	// vector<Player *>::iterator it;
-	// int p = 1;
-	// for(it = players.begin(); it != players.end(); it++){
-	// 	cout << "Player " << p << "'s turn" << endl << endl;
-		
-	// 	p++;
-	// }
+	cout << "Economy Phase" << endl << endl;
+	vector<Player *> players = gb->getPlayers();
+	vector<Player *>::iterator player;
+	int p = 1;
+	for(player = players.begin(); player != players.end(); player++){
+		cout << "Player " << p << "'s turn" << endl << endl;
+		p++;
+		int money = (*player)->getMoney();
+		bool finished = false;
+		while(!finished){
+			(*player)->printProvinces();
+			(*player)->printHoldings();
+			cout << "'Buy' to buy a province, 'Tap' to tap a holding or 'done' to stop" << endl;
+			cout << "You have " << money << " gold" << endl;
+			string input;
+			cin >> input;
+			if(input == "tap" || input == "Tap"){
+				money += (*player)->tapHoldings();
+			}else if(input == "buy" || input == "Buy"){
+				int cost = (*player)->chooseProvince(money);
+				if(money-(*player)->getMoney() < cost){
+					(*player)->pay(money-cost);
+				}
+				money -= cost;
+			}else if(input == "done" || input == "Done"){
+				finished = true;
+			}else{
+				cout << "Invalid input, try again" << endl;
+			}
+		}
+	}
 }
+
+void GameManager::lastPhase(){
+	cout << "Last Phase" << endl << endl;
+	vector<Player *> players = gb->getPlayers();
+	vector<Player *>::iterator it;
+	int p = 1;
+	for(it = players.begin(); it != players.end(); it++){
+		cout << "Player " << p << "'s turn" << endl << endl;
+		(*it)->discardSurplusFateCards();
+		(*it)->printProvinces();
+		(*it)->printHand();
+		(*it)->printHoldings();
+		(*it)->printArena();
+		p++;
+	}
+	gb->printGameStatistics();
+} 
+
+Player *GameManager::checkWinningCondition(){
+	vector<Player *> players = gb->getPlayers();
+	vector<Player *>::iterator it;
+	for(it = players.begin(); it != players.end(); it++){
+		if((*it)->getnumofprov() == 0){
+			players.erase(it);	
+		}
+	}
+	if(players.size() == 1){
+		return players.front();
+	}
+	return nullptr;
+}
+

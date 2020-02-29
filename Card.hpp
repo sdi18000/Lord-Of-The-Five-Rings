@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 
+
 enum type{PERSONALITY = 1, HOLDING, FOLLOWER, ITEM};
 enum personality{ATTACKER, DEFENDER, SHOGUN, CHANCELLOR, CHAMPION}; 
 enum holding{PLAIN, MINE, GOLD_MINE, CRYSTAL_MINE, FARMS, SOLO, STRONGHOLD}; 
@@ -20,6 +21,8 @@ class Card{
 		void untap();
 		std::string getName();
 		int getCost();
+		int istapped();
+		
 };
 
 
@@ -37,6 +40,12 @@ class GreenCard:public Card{
 		void upgrade();
 		int getEffectCost();
 		int getMinHonour();
+		int getbonusattack();
+		int getbonusdefence();
+		virtual int isdead()=0;
+		virtual int isbroken()=0;
+		virtual void reducedurability()=0;
+		
 };
 
 class BlackCard:public Card{
@@ -44,5 +53,7 @@ class BlackCard:public Card{
 		int isRevealed;
 	public:
 		BlackCard(std::string n,type t,int c);
-		virtual void reveal(void);	
+		virtual void reveal(void);
+		virtual int isdead()=0;
+			
 };

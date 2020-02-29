@@ -139,3 +139,9 @@ GreenCard *DeckBuilder::drawFateCard(){
 	green->pop_front();
 	return card;
 }
+
+BlackCard *DeckBuilder::drawDynastyCard(){
+	BlackCard *card = black->front();
+	black->pop_front();
+	return card;
+}

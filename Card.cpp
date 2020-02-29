@@ -131,7 +131,7 @@ BlackCard::BlackCard(string n,type t,int c):Card(n,t,c){
 Follower::Follower(string n,follower f):GreenCard(n,FOLLOWER,f){
 	switch(f){
 		case(0):
-			
+			isDead=0;
 			attackBonus=2;
 			defenceBonus=0;
 			minimumHonour=1;
@@ -141,7 +141,7 @@ Follower::Follower(string n,follower f):GreenCard(n,FOLLOWER,f){
 			break;
 	
 		case(1):
-	
+			isDead=0;
 			attackBonus=0;
 			defenceBonus=2;
 			minimumHonour=1;
@@ -151,7 +151,7 @@ Follower::Follower(string n,follower f):GreenCard(n,FOLLOWER,f){
 			break;
 		
 		case(2):
-			
+			isDead=0;
 			attackBonus=3;
 			defenceBonus=3;
 			minimumHonour=2;
@@ -161,7 +161,7 @@ Follower::Follower(string n,follower f):GreenCard(n,FOLLOWER,f){
 			break;
 		
 		case(3):
-			
+			isDead=0;
 			attackBonus=4;
 			defenceBonus=2;
 			minimumHonour=3;
@@ -171,7 +171,7 @@ Follower::Follower(string n,follower f):GreenCard(n,FOLLOWER,f){
 			break;
 		
 		case(4):
-		
+			isDead=0;
 			attackBonus=2;
 			defenceBonus=4;
 			minimumHonour=3;
@@ -181,7 +181,7 @@ Follower::Follower(string n,follower f):GreenCard(n,FOLLOWER,f){
 			break;
 		
 		case(5):
-			
+			isDead=0;
 			attackBonus=8;
 			defenceBonus=8;
 			minimumHonour=6;
@@ -383,14 +383,34 @@ int Holding::getHarvestValue(void){
 }
 
 //holding chain
-void Holding::connect(Holding* sh,Holding* uh){
-	if(sh!=NULL){
-		subHolding=sh;
-		sh->upperHolding = this;
+void Holding::connect(Holding* hold){
+	if(hold->upperHolding != NULL || hold->subHolding != NULL){
+		return;
 	}
-	if(uh!=NULL){
-		upperHolding=uh;
-		uh->subHolding = this;
+	holding type = hold->holdingType;
+	switch(holdingType){
+		case(MINE):
+			if(upperHolding == NULL && type == GOLD_MINE){
+				upperHolding = hold;
+				hold->subHolding = this;
+			}
+			break;
+		case(GOLD_MINE):
+			if(upperHolding == NULL && type == CRYSTAL_MINE){
+				upperHolding = hold;
+				hold->subHolding = this;
+			}
+			if(subHolding == NULL && type == MINE){
+				subHolding = hold;
+				hold->upperHolding = this;
+			}
+			break;
+		case(CRYSTAL_MINE):
+			if(subHolding == NULL && type == GOLD_MINE){
+				subHolding = hold;
+				hold->upperHolding = this;
+			}
+			break;
 	}
 	updateHarvest();
 	if(subHolding != NULL) subHolding->updateHarvest();
@@ -409,7 +429,7 @@ void Holding::updateHarvest(void){
 				harvestValue += 2*harvestValue;
 			}else if(subHolding != NULL){
 				harvestValue += 4;
-			}else{
+			}else if(upperHolding!=NULL){
 				harvestValue += 5;
 			}
 			break;
@@ -447,10 +467,28 @@ void Card::untap(){
 	isTapped = 0;
 }
 
+int Card::istapped(){
+	if(isTapped==1) return 1;
+	return 0;
+}
+
 int Card::getCost(){
 	return cost;
 }
 
+
+int GreenCard::getbonusattack(){
+	if(upgraded==true)  return(attackBonus+effectBonus);
+	return(attackBonus);
+}
+
+int GreenCard::getbonusdefence(){
+	if(upgraded==true)  return(defenceBonus+effectBonus);
+	return(defenceBonus);
+}
+
+		
+		
 int GreenCard::getEffectCost(){
 	return effectCost;
 }
@@ -462,6 +500,127 @@ int GreenCard ::getMinHonour(){
 int Personality::getHonour(){
 	return honour;
 }
+
+vector<Follower*> Personality::getfollowers(){
+	vector<Follower*> copy;
+	list<GreenCard*>::iterator it;
+	for(it=gl.begin();it!=gl.end();it++){
+		if((*it)->getType()==FOLLOWER){
+			copy.push_back((Follower*)(*it));
+		}
+	}
+	return copy;
+}
+
+vector<Item*> Personality::getitems(){
+	vector<Item*> copy;
+	list<GreenCard*>::iterator it;
+	for(it=gl.begin();it!=gl.end();it++){
+		if((*it)->getType()==ITEM){
+			copy.push_back((Item*)(*it));
+		}
+	}
+	return copy;
+}
+
+void Personality::printfollowers(){
+	list<GreenCard*>::iterator it;
+	for(it=gl.begin();it!=gl.end();it++){
+		if((*it)->getType()==FOLLOWER){
+			(*it)->print();
+			if((*it)->isdead()==1){
+				cout <<" (and follower already selected)\n";
+			}
+		}
+	}
+}
+
+void Personality::printitems(){
+	list<GreenCard*>::iterator it;
+	for(it=gl.begin();it!=gl.end();it++){
+		if((*it)->getType()==ITEM){
+			(*it)->print();
+		}
+	}
+}
+
+int Personality::isdead(){
+	if(isDead==1) return 1;
+	return 0;
+}
+
+int Follower::isdead(){
+	if(isDead==1) return 1;
+	return 0;
+}
+
+void Personality::setdead(){
+	isDead=1;
+}
+
+void Personality::setalive(){
+	isDead=0;
+}
+
+void Follower::setdead(){
+	isDead=1;
+}
+
+void Follower::setalive(){
+	isDead=0;
+}
+
+void Personality::unequipdeadfol(){
+	list<GreenCard*>::iterator it;
+	for(it=gl.begin();it!=gl.end();it++){
+		if((*it)->getType()==ITEM){
+			continue;
+		}
+		if((*it)->isdead()==1){
+			gl.remove((*it));
+		}
+	}
+}
+
+void Personality::undo(){
+		if(isdead()==1){
+			setalive();
+			return;
+		}
+		vector <Follower*>copy=getfollowers();
+		vector <Follower*>::iterator it3;
+		for(it3=copy.begin();it3!=copy.end();it3++){
+			if((*it3)->isdead()==1){
+				(*it3)->setalive();
+			}
+		}
+}
+
+
+int Personality::getattack(){
+	int at=attack;
+	list<GreenCard*>::iterator it;
+	if(gl.empty()) return attack;
+	for(it=gl.begin();it!=gl.end();it++){
+		at+=(*it)->getbonusattack();
+	}
+	return attack;
+}
+
+
+int Personality::getdefence(){
+	int def=defence;
+	list<GreenCard*>::iterator it;
+	if(gl.empty()) return defence;
+	for(it=gl.begin();it!=gl.end();it++){
+		def+=(*it)->getbonusdefence();
+		}
+	return defence;
+}
+
+
+
+
 
 bool Personality::HonouredEnough(GreenCard *card){
 	if(getHonour() >= card->getMinHonour()) return true;
@@ -501,6 +660,10 @@ void Personality::print(){
 	cout << endl << endl;
 }
 
+list<GreenCard*>& Personality::getgl(){
+	return gl;
+}
+
 void Follower::print(){
 	if(upgraded == true){
 		cout << "Upgraded ";
@@ -523,3 +686,44 @@ void BlackCard::reveal(){
 string Card::getName(){
 	return name;
 }
+
+void Item::reducedurability(){
+	durability-=1;
+}
+
+int Item::isbroken(){
+	if(durability==0) return 1;
+	return 0;
+}
+
+int Item::isdead(){
+	return 0;
+}
+
+void Personality::removebrokenitem(){
+	list<GreenCard*>::iterator it;
+	for(it=gl.begin();it!=gl.end();it++){
+		if((*it)->getType()==ITEM){
+			if((*it)->isbroken()==1){
+				gl.remove((*it));
+			}
+		}	
+	}
+}
+
+int Follower::isbroken(){
+	return 0;
+}
+void Follower::reducedurability(){
+	return;
+}
+
+int Holding::isdead(){
+	return 0;
+}
+
+void Personality::reducehonour(){
+	honour--;
+}
+
+
