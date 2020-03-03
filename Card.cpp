@@ -605,7 +605,6 @@ int Personality::getattack(){
 		at+=(*it)->getbonusattack();
 	}
 	return at;
-}
 
 
 int Personality::getdefence(){
