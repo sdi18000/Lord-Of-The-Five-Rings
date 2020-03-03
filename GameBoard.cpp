@@ -18,20 +18,25 @@ GameBoard::GameBoard(int n){
 		players.push_back(new Player(p,l));
 		l--;
 	}
-	
 }
-
 
 void GameBoard::printGameStatistics(){
-		vector<Player*>::iterator it;
-		int i=1;
-		for(it=players.begin();it!=players.end();it++){
-			cout << "Player " << i ;
-			(*it)->printstats(); 
-			i++;
-		}
+	vector<Player*>::iterator it;
+	int i=1;
+	for(it=players.begin();it!=players.end();it++){
+		cout << "Player " << i ;
+		(*it)->printstats(); 
+		i++;
+	}
 }
 
-vector<Player *> GameBoard::getPlayers(){
+vector<Player *>& GameBoard::getPlayers(){
 	return players;
 }	
+
+void GameBoard::printPlayers(){
+	vector<Player *>::iterator player;
+	for(player = players.begin(); player != players.end(); player++){
+		(*player)->print();
+	}
+}

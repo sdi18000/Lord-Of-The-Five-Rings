@@ -10,4 +10,7 @@ class Item:public GreenCard{
 		Item(std::string n,item i);
 		type getType();
 		void print();
+		void reducedurability();
+		int isbroken();
+		int isdead();
 };

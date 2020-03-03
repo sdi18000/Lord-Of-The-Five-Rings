@@ -4,11 +4,10 @@
 
 class Holding:public BlackCard{
 	protected:
-		//int isRevealed;
+		int isRevealed;
 		int harvestValue;
 		Holding* upperHolding;
 		Holding* subHolding;
-		void updateHarvest(void);
 		holding holdingType;
 	public:
 		int getHarvestValue(void);
@@ -16,4 +15,6 @@ class Holding:public BlackCard{
 		type getType();
 		void connect(Holding* hold);
 		void print();
+		int isdead();
+		void updateHarvest(void);
 };
