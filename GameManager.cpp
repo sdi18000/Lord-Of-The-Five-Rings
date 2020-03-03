@@ -8,6 +8,10 @@ GameManager::GameManager(int n){
 	gb = new GameBoard(n);
 }
 
+GameBoard *GameManager::getBoard(){
+	return gb;
+}
+
 void GameManager::startingPhase(){
 	cout << "Starting Phase" << endl << endl;
 	vector<Player *> players = gb->getPlayers();
@@ -32,7 +36,7 @@ void GameManager::equipPhase(){
 	for(player = players.begin(); player != players.end(); player++){
 		cout << "Player " << p << "'s turn" << endl << endl;
 		p++;
-		((*player)->getArmy()).push_back(new Personality("Hida Shozen",ATTACKER)); 
+		//((*player)->getArmy()).push_back(new Personality("Hida Shozen",ATTACKER)); 
 
 		vector<GreenCard *> vect;
 		list<GreenCard *>::iterator it;
@@ -87,6 +91,7 @@ void GameManager::equipPhase(){
 				(*player)->buy(selected_card);
 				refund += (selected_card->getCost());
 				cout << "Choose card from army or 'cancel' to cancel" << endl;
+				(*player)->printArena();
 				cin >> selection;
 				if(selection == "cancel"){
 					(*player)->receive(refund);
@@ -160,8 +165,7 @@ void GameManager::battlePhase(){
 	 int p = 1;
 	 for(it = players.begin(); it != players.end(); it++){
 	 	cout << "Player " << p << "'s turn" << endl << endl;	
-		p++;
-		
+		p++;	
 		vector<GreenCard *> vect;
 		list<GreenCard *>::iterator it3;
 		list<GreenCard *> hand = (*it)->getHand();
@@ -182,9 +186,9 @@ void GameManager::battlePhase(){
 		bool finished=false;
 		string selection;
 		(*it)->printArena();
-		cin >> selection;
-		cout << "Select the army you want for attack(type done or DONE when ready):\n";
 		while(!finished){
+			cout << "Select the army you want for attack(type done or DONE when ready):\n";
+			cin >> selection;
 			if(selection=="done" || selection=="DONE"){
 				finished=true;
 			}else{
@@ -204,6 +208,10 @@ void GameManager::battlePhase(){
 						cout << "Invalid input, try again" << endl;
 						continue;
 					}
+					if(per->istapped()){
+						cout << "Personality is already selected" << endl;
+						continue;
+					}
 					cout << "You have selected:\n";
 					per->print();
 					per->tap();
@@ -220,28 +228,33 @@ void GameManager::battlePhase(){
 	 		continue;
 	 	}
 	 	cout << "Player " << p << " please select the opponent you want to attack:\n" << endl;
+	 	gb->printPlayers();
 	 	string selection;
 	 	bool finished=false;
 	 	while(!finished){
 		 	cin >> selection;
 		 	int index;
 		 	try{
-					index = stoi(selection)-1;
-					try{
-						(*it)->setenemy(players.at(index));
-					}catch(out_of_range e){
-						cout << "Choose a valid card" << endl;
-						continue;
-					}
+				index = stoi(selection)-1;
+				try{
+					(*it)->setenemy(players.at(index));
 				}catch(out_of_range e){
-					cout << "Invalid input, try again" << endl;
-					continue;
-				}catch(invalid_argument){
-					cout << "Invalid input, try again" << endl;
+					cout << "Choose a valid card" << endl;
 					continue;
 				}
-				(*it)->setenemynum(index);
-				finished=true;
+			}catch(out_of_range e){
+				cout << "Invalid input, try again" << endl;
+				continue;
+			}catch(invalid_argument){
+				cout << "Invalid input, try again" << endl;
+				continue;
+			}
+			if((*it) == players.at(index)){
+				cout << "You can't attack yourself" << endl;
+				continue;
+			}
+			(*it)->setenemynum(index);
+			finished=true;
 		}
 	}
 	p=0;
@@ -259,7 +272,7 @@ void GameManager::battlePhase(){
 	 		cout << "Player " << p <<" 's attack to Player "<< (*it)->getenemynum()<< "is cancelled because enemy has no provinces\n\n";
 	 		continue;
 		}
-		cout << "Player " << p << " attacks Player " << (*it)->getenemynum() << endl;
+		cout << "Player " << p << " attacks Player " << (*it)->getenemynum()+1 << endl;
 		(*it)->attack(*((*it)->getenemy()));
 			
 	}
@@ -275,6 +288,7 @@ void GameManager::economyPhase(){
 	vector<Player *>::iterator player;
 	int p = 1;
 	for(player = players.begin(); player != players.end(); player++){
+		if((*player)->getnumofprov() == 0) continue;
 		cout << "Player " << p << "'s turn" << endl << endl;
 		p++;
 		int money = (*player)->getMoney();
@@ -291,7 +305,7 @@ void GameManager::economyPhase(){
 			}else if(input == "buy" || input == "Buy"){
 				int cost = (*player)->chooseProvince(money);
 				if(money-(*player)->getMoney() < cost){
-					(*player)->pay(money-cost);
+					(*player)->pay((*player)->getMoney()-(money-cost));
 				}
 				money -= cost;
 			}else if(input == "done" || input == "Done"){
@@ -323,9 +337,11 @@ void GameManager::lastPhase(){
 Player *GameManager::checkWinningCondition(){
 	vector<Player *> players = gb->getPlayers();
 	vector<Player *>::iterator it;
-	for(it = players.begin(); it != players.end(); it++){
+	for(it = players.begin(); it != players.end();){
 		if((*it)->getnumofprov() == 0){
-			players.erase(it);	
+			it = players.erase(it);	
+		}else{
+			++it;
 		}
 	}
 	if(players.size() == 1){
@@ -333,4 +349,3 @@ Player *GameManager::checkWinningCondition(){
 	}
 	return nullptr;
 }
-

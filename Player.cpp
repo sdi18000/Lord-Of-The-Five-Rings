@@ -77,7 +77,7 @@ void Player::printProvinces(){
 	list<BlackCard*>::iterator it;
 	if(provinces.size()!=0){
 		for(it=provinces.begin();it!=provinces.end();it++){
-			(*it)->print();
+			if((*it)->isrevealed()) (*it)->print();
 		}
 	}
 }
@@ -93,6 +93,7 @@ void Player::printArena(){
 }
 
 void Player::printHoldings(){
+	cout << "Your Holdings:" << endl << endl;
 	list<Holding*>::iterator it;
 	if(holdings.size()!=0){
 		for(it=holdings.begin();it!=holdings.end();it++){
@@ -132,7 +133,7 @@ int Player::getoverallattack(){
 }
 
 int Player::getoveralldefence(){
-	int def=5;
+	int def=0;
 	list<Personality*>::iterator it;
 	for(it=army.begin();it!=army.end();it++){
 		if((*it)->istapped()==0)
@@ -156,31 +157,30 @@ int Player::getnumofprov(){
 	return numOfProvinces;
 }
  
- 
- 
 int Player::attack(Player& p2){
 	int target;
 	string selection;
-	cout << "Please select the enemy province you want to attack:\n";
-	cin >> selection;
 	bool finished=false;
 	while(!finished){
+		cout << "Please select the enemy province you want to attack:\n";
+		p2.printProvinces();
+		cin >> selection;
 		try{
-					target = stoi(selection)-1;	
-					if(target<=0 || target>p2.getnumofprov()){
-						cout << "Invalid input,try again\n";
-						continue;
-					}
-				}catch(out_of_range e){
-					cout << "Invalid input, try again" << endl;
-					continue;
-				}catch(invalid_argument){
-					cout << "Invalid input, try again" << endl;
-					continue;
-				}
-				finished=true;
+			target = stoi(selection)-1;	
+			if(target+1<=0 || target+1>p2.getnumofprov()){
+				cout << "Invalid input,try again\n";
+				continue;
+			}
+		}catch(out_of_range e){
+			cout << "Invalid input, try again" << endl;
+			continue;
+		}catch(invalid_argument){
+			cout << "Invalid input, try again" << endl;
+			continue;
+		}
+		finished=true;
 	}
-	if(getoverallattack()-p2.getoveralldefence()>5){
+	if(getoverallattack()-p2.getoveralldefence()-5>5){
 		int i=0;
 		list<BlackCard*>::iterator it1;
 		for(it1=(p2.provinces).begin();it1!=(p2.provinces).end();it1++){
@@ -225,22 +225,31 @@ int Player::attack(Player& p2){
 		attackarmy.clear();
 	}else if(getoverallattack()-p2.getoveralldefence()==0){
 		list<Personality*>::iterator it;
-		for(it=(p2.army).begin();it!=(p2.army).end();it++){
+		for(it=(p2.army).begin();it!=(p2.army).end();){
 			if((*it)->istapped()==0)
-				(p2.army).remove((*it));
+				it = p2.army.erase(it);
+			else{
+				++it;
+			}
 		}
-		for(it=army.begin();it!=army.end();it++){
+		for(it=army.begin();it!=army.end();){
 			if((*it)->istapped()==0)
-				army.remove((*it));
+				it = army.erase(it);
+			else{
+				++it;
+			}
 		}
 		attackarmy.clear();
 		(p2.attackarmy).clear();
 		
 	}else{
 		list<Personality*>::iterator it;
-		for(it=army.begin();it!=army.end();it++){
+		for(it=army.begin();it!=army.end();){
 			if((*it)->istapped()==0)
-				army.remove((*it));
+				it = army.erase(it);
+			else{
+				++it;
+			}
 		}
 		p2.select(p2.getoveralldefence()-getoverallattack());
 		p2.reducearmyhonour();
@@ -251,7 +260,7 @@ int Player::attack(Player& p2){
 void Player::select(int dif){
 	cout << "Please select personalities to lose with overall attack >= than " << dif << endl;
 	bool finished=false;
-	int oa;
+	int oa = 0;
 	list<Personality*>::iterator it2;
 	vector<Personality*> per;
 	for(it2=army.begin();it2!=army.end();it2++){
@@ -259,12 +268,18 @@ void Player::select(int dif){
 	}
 	string selection;
 	while(!finished){
+		if(army.empty()){
+			cout << "You have no army" << endl;
+			finished = true;
+			continue;
+		}
 		cout << "Your available options are:\n";
 		for(it2=army.begin();it2!=army.end();it2++){
-			cout << "Personality "<< (*it2)->getName() << "has the following followers\n\n";
-			(*it2)->printfollowers();
+			// cout << "Personality "<< (*it2)->getName() << "has the following followers\n\n";
+			// (*it2)->printfollowers();
+			(*it2)->print();
 			if((*it2)->isdead()==1)
-				cout << " (and personality already selected)\n";
+				cout << "(personality already selected)\n";
 			continue;
 		}
 		cin >> selection;
@@ -288,8 +303,7 @@ void Player::select(int dif){
 				removedeadper();
 				for(it2=army.begin();it2!=army.end();it2++){
 					(*it)->unequipdeadfol();
-				}
-				
+				}		
 			}else{
 				cout << "Not enough overall attack points,please select again from the beginning:\n";
 				vector <Personality*>::iterator it;
@@ -301,8 +315,8 @@ void Player::select(int dif){
 		}else if(selection.length()==3){
 			int i,j;
 			try{	
-				i=atoi(&(selection.at(0)));
-				j=atoi(&(selection.at(2)));
+				i=atoi(&selection.at(0));
+				j=atoi(&selection.at(2));
 				try{
 					per.at(i);
 					((per.at(i))->getfollowers()).at(j);
@@ -319,11 +333,11 @@ void Player::select(int dif){
 				cout << "Invalid input, try again" << endl;
 				continue;
 			}
-			if((((per.at(i))->getfollowers()).at(j))->isdead()==1){
+			if(per.at(i)->getfollowers().at(j)->isdead()==1){
 				cout << "Invalid follower, already selected, please select another one" << endl;
 				continue;
 			}
-			(((per.at(i))->getfollowers()).at(j))->setdead();
+			per.at(i)->getfollowers().at(j)->setdead();
 		}else{	
 			int index;
 			try{
@@ -342,11 +356,11 @@ void Player::select(int dif){
 				cout << "Invalid input, try again" << endl;
 				continue;
 			}
-			if((per.at(index))->isdead()==1){
+			if(per.at(index)->isdead()==1){
 				cout << "Invalid personality, already selected, please select another one" << endl;
 				continue;
 			}
-			(per.at(index))->setdead();
+			per.at(index)->setdead();
 		}
 	}
 }
@@ -381,15 +395,22 @@ Stronghold *Player::getStronghold(){
 	return str;
 }
 
+void Player::print(){
+	cout << "Player with Stronghold: " << getStronghold()->getName() << endl;
+}
+
 void Player::removeFromHand(GreenCard *card){
 	hand.remove(card);
 }
 
 void Player::removedeadper(){
-	list<Personality*>::iterator it;
-	for(it=army.begin();it!=army.end();it++){
+	list<Personality *>::iterator it;
+	for(it = army.begin(); it != army.end();){
 		if((*it)->isdead()==1)
-			army.remove((*it));
+			it = army.erase(it);
+		else{
+			++it;
+		}
 	}
 }
 
@@ -456,6 +477,10 @@ int Player::chooseProvince(int money){
 				int index = stoi(selection)-1;
 				try{
 					BlackCard *prov = vect.at(index);
+					if(prov->isrevealed() == 0){
+						cout << "Province is hidden, please select another one" << endl;
+						continue;
+					}
 					if(prov->getCost() > money){
 						cout << "Can't afford " << prov->getName() << endl;
 						continue;
@@ -549,6 +574,3 @@ void Player::drawDynastyCard(){
 	cout << "Drawing Dynasty Card" << endl << endl;
 	provinces.push_back(deck->drawDynastyCard());
 }
-	
-
-

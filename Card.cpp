@@ -125,7 +125,7 @@ GreenCard::GreenCard(string n,type t,int c):Card(n,t,c){
 	
 	
 BlackCard::BlackCard(string n,type t,int c):Card(n,t,c){
-	
+	isRevealed = 0;
 }
 
 Follower::Follower(string n,follower f):GreenCard(n,FOLLOWER,f){
@@ -600,22 +600,21 @@ void Personality::undo(){
 int Personality::getattack(){
 	int at=attack;
 	list<GreenCard*>::iterator it;
-	if(gl.empty()) return attack;
+	if(gl.empty()) return at;
 	for(it=gl.begin();it!=gl.end();it++){
 		at+=(*it)->getbonusattack();
 	}
-	return attack;
-}
+	return at;
 
 
 int Personality::getdefence(){
 	int def=defence;
 	list<GreenCard*>::iterator it;
-	if(gl.empty()) return defence;
+	if(gl.empty()) return def;
 	for(it=gl.begin();it!=gl.end();it++){
 		def+=(*it)->getbonusdefence();
 		}
-	return defence;
+	return def;
 }
 
 
@@ -650,7 +649,7 @@ void Holding::print(){
 
 void Personality::print(){
 	cout << "Personality: " << name << " with " << attack << " attack, "<< defence << " defence, "<< honour << " honour and "<< cost << " cost\n";
-	cout << "Its followers and items are: ";
+	cout << "Its followers and items are: \n";
 	list <GreenCard*>::iterator it;
 	if(gl.size()!=0){
 		for(it=gl.begin();it!=gl.end();it++){
@@ -726,4 +725,6 @@ void Personality::reducehonour(){
 	honour--;
 }
 
-
+int BlackCard::isrevealed(){
+	return isRevealed;
+}

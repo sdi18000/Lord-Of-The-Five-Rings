@@ -9,5 +9,6 @@ class GameBoard{
 	public:
 		GameBoard(int n);
 		void printGameStatistics();
-		std::vector<Player *>& getPlayers();	
+		std::vector<Player *>& getPlayers();
+		void printPlayers();	
 };

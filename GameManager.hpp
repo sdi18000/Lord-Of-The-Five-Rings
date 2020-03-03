@@ -12,4 +12,5 @@ public:
 	void economyPhase();
 	void lastPhase();
 	Player *checkWinningCondition();
+	GameBoard *getBoard();
 };

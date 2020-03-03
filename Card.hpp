@@ -55,5 +55,5 @@ class BlackCard:public Card{
 		BlackCard(std::string n,type t,int c);
 		virtual void reveal(void);
 		virtual int isdead()=0;
-			
+		int isrevealed();	
 };

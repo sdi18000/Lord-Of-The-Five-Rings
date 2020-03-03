@@ -25,6 +25,7 @@ protected:
 
 public:
 	Player(std::string n,int i);
+	void print();
 	void printstats();
 	void untapEverything();
 	void drawFateCard();
