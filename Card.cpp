@@ -384,33 +384,32 @@ int Holding::getHarvestValue(void){
 
 //holding chain
 void Holding::connect(Holding* hold){
-	if(hold->upperHolding != NULL || hold->subHolding != NULL){
-		return;
-	}
 	holding type = hold->holdingType;
 	switch(holdingType){
 		case(MINE):
-			if(upperHolding == NULL && type == GOLD_MINE){
+			if(upperHolding == NULL && type == GOLD_MINE && hold->subHolding == NULL){
 				upperHolding = hold;
 				hold->subHolding = this;
 			}
 			break;
 		case(GOLD_MINE):
-			if(upperHolding == NULL && type == CRYSTAL_MINE){
+			if(upperHolding == NULL && type == CRYSTAL_MINE && hold->subHolding == NULL){
 				upperHolding = hold;
 				hold->subHolding = this;
 			}
-			if(subHolding == NULL && type == MINE){
+			if(subHolding == NULL && type == MINE && hold->upperHolding == NULL){
 				subHolding = hold;
 				hold->upperHolding = this;
 			}
 			break;
 		case(CRYSTAL_MINE):
-			if(subHolding == NULL && type == GOLD_MINE){
+			if(subHolding == NULL && type == GOLD_MINE && hold->upperHolding == NULL){
 				subHolding = hold;
 				hold->upperHolding = this;
 			}
 			break;
+		default:
+			return;
 	}
 	updateHarvest();
 	if(subHolding != NULL) subHolding->updateHarvest();
@@ -572,12 +571,14 @@ void Follower::setalive(){
 
 void Personality::unequipdeadfol(){
 	list<GreenCard*>::iterator it;
-	for(it=gl.begin();it!=gl.end();it++){
+	for(it=gl.begin();it!=gl.end();){
 		if((*it)->getType()==ITEM){
 			continue;
 		}
 		if((*it)->isdead()==1){
-			gl.remove((*it));
+			it = gl.erase(it);
+		}else{
+			++it;
 		}
 	}
 }
@@ -605,6 +606,7 @@ int Personality::getattack(){
 		at+=(*it)->getbonusattack();
 	}
 	return at;
+}
 
 
 int Personality::getdefence(){
@@ -613,7 +615,7 @@ int Personality::getdefence(){
 	if(gl.empty()) return def;
 	for(it=gl.begin();it!=gl.end();it++){
 		def+=(*it)->getbonusdefence();
-		}
+	}
 	return def;
 }
 
@@ -701,10 +703,12 @@ int Item::isdead(){
 
 void Personality::removebrokenitem(){
 	list<GreenCard*>::iterator it;
-	for(it=gl.begin();it!=gl.end();it++){
+	for(it=gl.begin();it!=gl.end();){
 		if((*it)->getType()==ITEM){
 			if((*it)->isbroken()==1){
-				gl.remove((*it));
+				it = gl.erase(it);
+			}else{
+				++it;
 			}
 		}	
 	}

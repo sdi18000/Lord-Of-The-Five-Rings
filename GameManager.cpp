@@ -56,6 +56,8 @@ void GameManager::equipPhase(){
 
 		bool finished = false;
 		string selection;
+		int startingmoney = (*player)->getMoney();
+		(*player)->receive((*player)->tapHoldings());
 		while(!finished){
 			(*player)->printHand();
 			(*player)->printArena();
@@ -155,6 +157,8 @@ void GameManager::equipPhase(){
 				}
 			}
 		}
+		if((*player)->getMoney() > startingmoney)
+			(*player)->pay((*player)->getMoney()-startingmoney);
 	}
 }
 
@@ -165,7 +169,8 @@ void GameManager::battlePhase(){
 	 int p = 1;
 	 for(it = players.begin(); it != players.end(); it++){
 	 	cout << "Player " << p << "'s turn" << endl << endl;	
-		p++;	
+		p++;
+		
 		vector<GreenCard *> vect;
 		list<GreenCard *>::iterator it3;
 		list<GreenCard *> hand = (*it)->getHand();
@@ -278,9 +283,6 @@ void GameManager::battlePhase(){
 	}
 	
 }
-
-
-
 
 void GameManager::economyPhase(){
 	cout << "Economy Phase" << endl << endl;

@@ -183,28 +183,36 @@ int Player::attack(Player& p2){
 	if(getoverallattack()-p2.getoveralldefence()-5>5){
 		int i=0;
 		list<BlackCard*>::iterator it1;
-		for(it1=(p2.provinces).begin();it1!=(p2.provinces).end();it1++){
+		for(it1=(p2.provinces).begin();it1!=(p2.provinces).end();){
 			if(target==i){
-				(p2.provinces).remove((*it1));
+				it1 = (p2.provinces).erase(it1);
 				break;
 				
+			}else{
+				++it1;
 			}
 			i++;
 		}
 		(p2.numOfProvinces)--;
 		list<Personality*>::iterator it;
-		for(it=(p2.army).begin();it!=(p2.army).end();it++){
+		for(it=(p2.army).begin();it!=(p2.army).end();){
 			if((*it)->istapped()==0)
-				(p2.army).remove((*it));
+				it = (p2.army).erase(it);
+			else{
+				++it;
+			}
 		}
 		attackarmy.clear();
 	}else if(getoverallattack()-p2.getoveralldefence()>0){
-		list<Personality*>::iterator it;
-		for(it=(p2.army).begin();it!=(p2.army).end();it++){
-			if((*it)->istapped()==0)
-				(p2.army).remove((*it));
-		}
 		select(getoverallattack()-p2.getoveralldefence());
+		list<Personality*>::iterator it;
+		for(it = (p2.army).begin(); it != (p2.army).end();){
+			if((*it)->istapped() == 0)
+				it = (p2.army).erase(it);
+			else{
+				++it;
+			}
+		}
 		reducearmyhonour();
 		for(it=army.begin();it!=army.end();it++){
 			if((*it)->istapped()==1){
@@ -233,7 +241,7 @@ int Player::attack(Player& p2){
 			}
 		}
 		for(it=army.begin();it!=army.end();){
-			if((*it)->istapped()==0)
+			if((*it)->istapped()==1)
 				it = army.erase(it);
 			else{
 				++it;
@@ -242,7 +250,8 @@ int Player::attack(Player& p2){
 		attackarmy.clear();
 		(p2.attackarmy).clear();
 		
-	}else{
+	}else{	
+		p2.select2(p2.getoveralldefence()-getoverallattack());
 		list<Personality*>::iterator it;
 		for(it=army.begin();it!=army.end();){
 			if((*it)->istapped()==0)
@@ -251,14 +260,14 @@ int Player::attack(Player& p2){
 				++it;
 			}
 		}
-		p2.select(p2.getoveralldefence()-getoverallattack());
 		p2.reducearmyhonour();
 		attackarmy.clear();		
 	}
 }
 
 void Player::select(int dif){
-	cout << "Please select personalities to lose with overall attack >= than " << dif << endl;
+	cout << "Please select personalities/followers to lose with overall attack >= than " << dif << endl;
+	cout << "[n] for nth personality, [n-m] for mth follower of nth personality" << endl;
 	bool finished=false;
 	int oa = 0;
 	list<Personality*>::iterator it2;
@@ -302,7 +311,7 @@ void Player::select(int dif){
 				finished=true;
 				removedeadper();
 				for(it2=army.begin();it2!=army.end();it2++){
-					(*it)->unequipdeadfol();
+					(*it2)->unequipdeadfol();
 				}		
 			}else{
 				cout << "Not enough overall attack points,please select again from the beginning:\n";
@@ -312,15 +321,14 @@ void Player::select(int dif){
 				}
 				continue;
 			}
-		}else if(selection.length()==3){
+		}else if(selection.length()>1){
 			int i,j;
-			try{	
-				i=atoi(&selection.at(0));
-				j=atoi(&selection.at(2));
+			try{
+				i=stoi(selection.substr(0, selection.find("-")))-1;
+				j=stoi(selection.substr(selection.find("-")+1))-1;
 				try{
 					per.at(i);
 					((per.at(i))->getfollowers()).at(j);
-					
 				}
 				catch(out_of_range){
 					cout << "Invalid input, try again" << endl;
@@ -364,6 +372,116 @@ void Player::select(int dif){
 		}
 	}
 }
+
+void Player::select2(int dif){
+	cout << "Please select personalities/followers to lose with overall defence >= than " << dif << endl;
+	cout << "[n] for nth personality, [n-m] for mth follower of nth personality" << endl;
+	bool finished=false;
+	int od = 0;
+	list<Personality*>::iterator it2;
+	vector<Personality*> per;
+	for(it2=army.begin();it2!=army.end();it2++){
+		per.push_back(*(it2));
+	}
+	string selection;
+	while(!finished){
+		if(army.empty()){
+			cout << "You have no army" << endl;
+			finished = true;
+			continue;
+		}
+		cout << "Your available options are:\n";
+		for(it2=army.begin();it2!=army.end();it2++){
+			// cout << "Personality "<< (*it2)->getName() << "has the following followers\n\n";
+			// (*it2)->printfollowers();
+			(*it2)->print();
+			if((*it2)->isdead()==1)
+				cout << "(personality already selected)\n";
+			continue;
+		}
+		cin >> selection;
+		if(selection=="DONE" || selection=="done"){
+			vector <Personality*>::iterator it;
+			for(it=per.begin();it!=per.end();it++){
+				if((*it)->isdead()==1){
+					od+=(*it)->getdefence();
+					continue;
+				}
+				vector <Follower*> copy=(*it)->getfollowers();
+				vector <Follower*>::iterator it3;
+				for(it3=copy.begin();it3!=copy.end();it3++){
+					if((*it3)->isdead()==1){
+						od+=(*it3)->getbonusdefence();
+					}
+				}
+			}
+			if(od>=dif){
+				finished=true;
+				removedeadper();
+				for(it2=army.begin();it2!=army.end();it2++){
+					(*it2)->unequipdeadfol();
+				}		
+			}else{
+				cout << "Not enough overall defence points, please select again from the beginning:\n";
+				vector <Personality*>::iterator it;
+				for(it=per.begin();it!=per.end();it++){
+					(*it)->undo();
+				}
+				continue;
+			}
+		}else if(selection.length()>1){
+			int i,j;
+			try{	
+				i=stoi(selection.substr(0, selection.find("-")))-1;
+				j=stoi(selection.substr(selection.find("-")+1))-1;
+				try{
+					per.at(i);
+					((per.at(i))->getfollowers()).at(j);
+					
+				}
+				catch(out_of_range){
+					cout << "Invalid input, try again" << endl;
+					continue;
+				}
+			}catch(out_of_range e){
+				cout << "Invalid input, try again" << endl;
+				continue;
+			}catch(invalid_argument){
+				cout << "Invalid input, try again" << endl;
+				continue;
+			}
+			if(per.at(i)->getfollowers().at(j)->isdead()==1){
+				cout << "Invalid follower, already selected, please select another one" << endl;
+				continue;
+			}
+			per.at(i)->getfollowers().at(j)->setdead();
+		}else{
+			int index;
+			try{
+				index = stoi(selection)-1;	
+				try{
+					per.at(index);
+				}
+				catch(out_of_range){
+					cout << "Invalid input, try again" << endl;
+					continue;
+				}
+			}catch(out_of_range e){
+				cout << "Invalid input, try again" << endl;
+				continue;
+			}catch(invalid_argument){
+				cout << "Invalid input, try again" << endl;
+				continue;
+			}
+			if(per.at(index)->isdead()==1){
+				cout << "Invalid personality, already selected, please select another one" << endl;
+				continue;
+			}
+			per.at(index)->setdead();
+		}
+	}
+}
+
 void Player::pay(int amount){
 	money -= amount;
 }
@@ -558,16 +676,14 @@ int Player::getMoney(){
 
 void Player::reducearmyhonour(){
 	list <Personality*>::iterator it;
-	for(it=army.begin();it!=army.end();it++){
+	for(it=army.begin();it!=army.end();){
 		(*it)->reducehonour();
 		if((*it)->getHonour()==0){
-			performSeppuku((*it));
+			it = army.erase(it);
+		}else{
+			++it;
 		}
 	}
-}
-
-void Player::performSeppuku(Personality* p){
-	army.remove(p);
 }
 
 void Player::drawDynastyCard(){

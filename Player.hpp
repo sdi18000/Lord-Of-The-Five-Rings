@@ -57,6 +57,7 @@ public:
 	int getnumofprov();
 	void removedeadper();
 	void select(int i);
+	void select2(int i);
 	int chooseProvince(int money);
 	int tapHoldings();
 	void discardSurplusFateCards();
