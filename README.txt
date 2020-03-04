@@ -47,6 +47,18 @@ the attackarmy  list for keeping the army used for attack (which makes it easier
 of a player(basically the player they are about to attack).
 
 
+GAMEMANAGER
+-----------
+
+A gamemanager is responsible for all the phases of the game.
+The gamemanager has a gameboard.
+
+
+GAMEBOARD
+---------
+
+A gameboard has the players of the game.
+
 
 PHASES
 ------
