@@ -20,6 +20,14 @@ GameBoard::GameBoard(int n){
 	}
 }
 
+GameBoard::~GameBoard(){
+	vector<Player *>::iterator it;
+	for(it = players.begin(); it != players.end(); it++){
+		delete *it;
+	}
+	players.clear();
+}
+
 void GameBoard::printGameStatistics(){
 	vector<Player*>::iterator it;
 	int i=1;

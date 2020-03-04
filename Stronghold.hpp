@@ -2,8 +2,6 @@
 #include <iostream>
 #include "Holding.hpp"
 
-
-
 class Stronghold:public Holding{
 	protected:
 		int StartingHonour;

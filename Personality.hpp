@@ -18,6 +18,7 @@ class Personality:public BlackCard{
 		std::list<GreenCard*> gl;
 	public:
 		Personality(std::string n,personality p);
+		~Personality();
 		type getType();
 		void equip(GreenCard* g,bool a);
 		void print();
