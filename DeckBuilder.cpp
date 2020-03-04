@@ -15,14 +15,14 @@ DeckBuilder::~DeckBuilder()
 	list<GreenCard *>::iterator it2;
 	for (it = black->begin(); it != black->end(); it++)
 	{
-		black->remove((*it));
 		delete *it;
+		black->remove((*it));
 		it = black->begin();
 	}
 	for (it2 = green->begin(); it2 != green->end(); it++)
 	{
-		green->remove((*it2));
 		delete *it2;
+		green->remove((*it2));
 		it2 = green->begin();
 	}
 	delete black;

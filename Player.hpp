@@ -25,6 +25,7 @@ protected:
 
 public:
 	Player(std::string n,int i);
+	~Player();
 	void print();
 	void printstats();
 	void untapEverything();

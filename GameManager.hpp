@@ -6,6 +6,7 @@ protected:
 	GameBoard *gb;
 public:
 	GameManager(int n);
+	~GameManager();
 	void startingPhase();
 	void equipPhase();
 	void battlePhase();

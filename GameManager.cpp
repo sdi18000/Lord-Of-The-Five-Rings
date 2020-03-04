@@ -8,6 +8,10 @@ GameManager::GameManager(int n){
 	gb = new GameBoard(n);
 }
 
+GameManager::~GameManager(){
+	delete(gb);
+}
+
 GameBoard *GameManager::getBoard(){
 	return gb;
 }
@@ -36,7 +40,6 @@ void GameManager::equipPhase(){
 	for(player = players.begin(); player != players.end(); player++){
 		cout << "Player " << p << "'s turn" << endl << endl;
 		p++;
-		//((*player)->getArmy()).push_back(new Personality("Hida Shozen",ATTACKER)); 
 
 		vector<GreenCard *> vect;
 		list<GreenCard *>::iterator it;
@@ -57,6 +60,9 @@ void GameManager::equipPhase(){
 		bool finished = false;
 		string selection;
 		int startingmoney = (*player)->getMoney();
+		(*player)->printHand();
+		(*player)->printArena();
+		(*player)->printMoney();
 		(*player)->receive((*player)->tapHoldings());
 		while(!finished){
 			(*player)->printHand();

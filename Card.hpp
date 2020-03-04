@@ -1,7 +1,6 @@
 #pragma once
 #include <iostream>
 
-
 enum type{PERSONALITY = 1, HOLDING, FOLLOWER, ITEM};
 enum personality{ATTACKER, DEFENDER, SHOGUN, CHANCELLOR, CHAMPION}; 
 enum holding{PLAIN, MINE, GOLD_MINE, CRYSTAL_MINE, FARMS, SOLO, STRONGHOLD}; 
@@ -25,8 +24,6 @@ class Card{
 		
 };
 
-
-
 class GreenCard:public Card{
 	protected:
 		int attackBonus;
@@ -44,8 +41,7 @@ class GreenCard:public Card{
 		int getbonusdefence();
 		virtual int isdead()=0;
 		virtual int isbroken()=0;
-		virtual void reducedurability()=0;
-		
+		virtual void reducedurability()=0;		
 };
 
 class BlackCard:public Card{
