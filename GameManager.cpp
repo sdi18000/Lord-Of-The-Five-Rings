@@ -32,7 +32,7 @@ void GameManager::startingPhase(){
 	}
 }
 
-void GameManager::equipPhase(){
+void GameManager::equipPhase(){								//function that implements the equip phase
 	cout << "Equip Phase" << endl << endl;
 	vector<Player *> players = gb->getPlayers();
 	vector<Player *>::iterator player;
@@ -40,7 +40,7 @@ void GameManager::equipPhase(){
 	for(player = players.begin(); player != players.end(); player++){
 		cout << "Player " << p << "'s turn" << endl << endl;
 		p++;
-
+															//put the army  and hand in vectors in order to access them more easily
 		vector<GreenCard *> vect;
 		list<GreenCard *>::iterator it;
 		list<GreenCard *> hand = (*player)->getHand();
@@ -50,7 +50,7 @@ void GameManager::equipPhase(){
 		vector<Personality *> vect2;
 		list<Personality *>::iterator it2;
 		list<Personality *> army = (*player)->getArmy();
-		if(army.empty()){
+		if(army.empty()){								// if the player has no army then continue to the other players
 			cout << "Army is empty" << endl << endl;
 			continue;
 		}
@@ -63,7 +63,7 @@ void GameManager::equipPhase(){
 		(*player)->printHand();
 		(*player)->printArena();
 		(*player)->printMoney();
-		(*player)->receive((*player)->tapHoldings());
+		(*player)->receive((*player)->tapHoldings());       //tapholdings in order to get the proper amount of money needed
 		while(!finished){
 			(*player)->printHand();
 			(*player)->printArena();
@@ -90,7 +90,7 @@ void GameManager::equipPhase(){
 					cout << "Invalid input, try again" << endl;
 					continue;
 				}
-				cout << "You have selected:" << endl;
+				cout << "You have selected:" << endl;         
 				selected_card->print();
 				if((*player)->affords(selected_card) == false){
 					cout << "Not enough money" << endl;
@@ -98,10 +98,10 @@ void GameManager::equipPhase(){
 				}
 				(*player)->buy(selected_card);
 				refund += (selected_card->getCost());
-				cout << "Choose card from army or 'cancel' to cancel" << endl;
+				cout << "Choose card from army or 'cancel' to cancel" << endl;     //choose the personality  which the player wants to equip 
 				(*player)->printArena();
 				cin >> selection;
-				if(selection == "cancel"){
+				if(selection == "cancel"){								//if player regrets then give back their money
 					(*player)->receive(refund);
 					continue;
 				}else{
@@ -126,7 +126,7 @@ void GameManager::equipPhase(){
 					}
 					cout << "You have selected:" << endl;
 					per->print();
-					if(per->canEquip() == false){
+					if(per->canEquip() == false){			
 						(*player)->receive(refund);
 						cout << per->getName() << " can't equip any more cards" << endl;
 						continue;
@@ -139,18 +139,18 @@ void GameManager::equipPhase(){
 					cout << "Do you want to upgrade " + selected_card->getName() + "?" << endl;
 					string choice;
 					cin >> choice;
-					if(choice == "Yes" || choice == "yes"){
-						if((*player)->affords(selected_card->getEffectCost())){
+					if(choice == "Yes" || choice == "yes"){										
+						if((*player)->affords(selected_card->getEffectCost())){								//if thge player has enough money to upgrade then pay that amount and equip the greencard to the pesonality
 							(*player)->pay(selected_card->getEffectCost());
 							cout << "Upgraded and equipped " + selected_card->getName() << endl;
 							per->equip(selected_card,1);
 							(*player)->removeFromHand(selected_card);
 							vect.erase(remove(vect.begin(), vect.end(), selected_card), vect.end());
-						}else{
-							(*player)->receive(refund);
+						}else{																			//otherwise,cancel the selection and give player's money back
+							(*player)->receive(refund);				
 							cout << "Not enough money for upgrade" << endl;
 						}
-					}else if(choice == "No" || choice == "no"){
+					}else if(choice == "No" || choice == "no"){							//else just equip the greencard to the personality
 						cout << "Equipped " + selected_card->getName() << endl;
 						per->equip(selected_card,0);
 						(*player)->removeFromHand(selected_card);
@@ -163,7 +163,7 @@ void GameManager::equipPhase(){
 				}
 			}
 		}
-		if((*player)->getMoney() > startingmoney)
+		if((*player)->getMoney() > startingmoney)					//adjust  the players remaining money accordingly
 			(*player)->pay((*player)->getMoney()-startingmoney);
 	}
 }
@@ -176,7 +176,7 @@ void GameManager::battlePhase(){
 	 for(it = players.begin(); it != players.end(); it++){
 	 	cout << "Player " << p << "'s turn" << endl << endl;	
 		p++;
-		
+													//put the army and hand in vectors for the same reason as in equipphase
 		vector<GreenCard *> vect;
 		list<GreenCard *>::iterator it3;
 		list<GreenCard *> hand = (*it)->getHand();
@@ -223,7 +223,7 @@ void GameManager::battlePhase(){
 						cout << "Personality is already selected" << endl;
 						continue;
 					}
-					cout << "You have selected:\n";
+					cout << "You have selected:\n";			//if everything is ok then add the personality to the attackarmy
 					per->print();
 					per->tap();
 					((*it)->getattackArmy()).push_back(per);
@@ -232,7 +232,7 @@ void GameManager::battlePhase(){
 		}
 	}
 	p=0;
-	for(it = players.begin(); it != players.end(); it++){
+	for(it = players.begin(); it != players.end(); it++){     //players choose their opponents here
 		p++;
 		if(((*it)->getattackArmy()).empty()){
 	 		cout << "Player " << p << " has no attack army" << endl << endl;
@@ -290,7 +290,7 @@ void GameManager::battlePhase(){
 	
 }
 
-void GameManager::economyPhase(){
+void GameManager::economyPhase(){ 				 //function that implements the economy phase
 	cout << "Economy Phase" << endl << endl;
 	vector<Player *> players = gb->getPlayers();
 	vector<Player *>::iterator player;
@@ -308,12 +308,12 @@ void GameManager::economyPhase(){
 			cout << "You have " << money << " gold" << endl;
 			string input;
 			cin >> input;
-			if(input == "tap" || input == "Tap"){
+			if(input == "tap" || input == "Tap"){			//if the player decides to tap then tap the desired holdings
 				money += (*player)->tapHoldings();
-			}else if(input == "buy" || input == "Buy"){
+			}else if(input == "buy" || input == "Buy"){  			//else purchase the desired province
 				int cost = (*player)->chooseProvince(money);
 				if(money-(*player)->getMoney() < cost){
-					(*player)->pay((*player)->getMoney()-(money-cost));
+					(*player)->pay((*player)->getMoney()-(money-cost));			//adjust then remaining money of the player accordingly
 				}
 				money -= cost;
 			}else if(input == "done" || input == "Done"){
@@ -325,8 +325,8 @@ void GameManager::economyPhase(){
 	}
 }
 
-void GameManager::lastPhase(){
-	cout << "Last Phase" << endl << endl;
+void GameManager::lastPhase(){   //last phase 
+	cout << "Last Phase" << endl << endl;					
 	vector<Player *> players = gb->getPlayers();
 	vector<Player *>::iterator it;
 	int p = 1;
@@ -342,17 +342,17 @@ void GameManager::lastPhase(){
 	gb->printGameStatistics();
 } 
 
-Player *GameManager::checkWinningCondition(){
+Player *GameManager::checkWinningCondition(){			//function that checks if there is a winner 
 	vector<Player *> players = gb->getPlayers();
 	vector<Player *>::iterator it;
-	for(it = players.begin(); it != players.end();){
+	for(it = players.begin(); it != players.end();){    //delete players with 0 provinces
 		if((*it)->getnumofprov() == 0){
 			it = players.erase(it);	
 		}else{
 			++it;
 		}
 	}
-	if(players.size() == 1){
+	if(players.size() == 1){      //if there is only one player remaining then that's the winner
 		return players.front();
 	}
 	return nullptr;

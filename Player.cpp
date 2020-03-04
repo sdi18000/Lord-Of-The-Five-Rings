@@ -155,7 +155,7 @@ list<Personality *>& Player::getattackArmy(){
 	return attackarmy;
 }
 
-int Player::getoverallattack(){
+int Player::getoverallattack(){            //gets attack from each personality in the army and adds it to tthe overall attack
 	int at=0;
 	list<Personality*>::iterator it;
 	for(it=attackarmy.begin();it!=attackarmy.end();it++){
@@ -164,7 +164,7 @@ int Player::getoverallattack(){
 	return at;
 }
 
-int Player::getoveralldefence(){
+int Player::getoveralldefence(){				//gets defence from each personality in the army and adds it to the overall defence
 	int def=0;
 	list<Personality*>::iterator it;
 	for(it=army.begin();it!=army.end();it++){
@@ -174,11 +174,11 @@ int Player::getoveralldefence(){
 	return def;
 }
 
-void Player::setenemy(Player* p){
+void Player::setenemy(Player* p){     //sets the enemy player
 	enemy=p;
 }
 
-void Player::setenemynum(int i){
+void Player::setenemynum(int i){		//sets the number of the enemy (used for printing basically)
 	enemynum=i;
 }
 
@@ -194,14 +194,14 @@ int Player::getnumofprov(){
 	return numOfProvinces;
 }
  
-int Player::attack(Player& p2){
+int Player::attack(Player& p2){     //function which implements the attack of one player to player p2
 	int target;
 	string selection;
 	bool finished=false;
 	while(!finished){
 		cout << "Please select the enemy province you want to attack:\n";
 		p2.printProvinces();
-		cin >> selection;
+		cin >> selection;    //selection of province
 		try{
 			target = stoi(selection)-1;	
 			if(target+1<=0 || target+1>p2.getnumofprov()){
@@ -217,10 +217,10 @@ int Player::attack(Player& p2){
 		}
 		finished=true;
 	}
-	if(getoverallattack()-p2.getoveralldefence()-5>5){
+	if(getoverallattack()-p2.getoveralldefence()-5>5){   //if the attacker wins the battle
 		int i=0;
-		list<BlackCard*>::iterator it1;
-		for(it1=(p2.provinces).begin();it1!=(p2.provinces).end();){
+		list<BlackCard*>::iterator it1;    
+		for(it1=(p2.provinces).begin();it1!=(p2.provinces).end();){    // remove p2's selected province
 			if(target==i){
 				delete *it1;
 				it1 = (p2.provinces).erase(it1);
@@ -233,7 +233,7 @@ int Player::attack(Player& p2){
 		}
 		(p2.numOfProvinces)--;
 		list<Personality*>::iterator it;
-		for(it=(p2.army).begin();it!=(p2.army).end();){
+		for(it=(p2.army).begin();it!=(p2.army).end();){      //destroy p2's army
 			if((*it)->istapped()==0){
 				delete *it;
 				it = (p2.army).erase(it);
@@ -242,10 +242,10 @@ int Player::attack(Player& p2){
 			}
 		}
 		attackarmy.clear();
-	}else if(getoverallattack()-p2.getoveralldefence()>0){
-		select(getoverallattack()-p2.getoveralldefence());
+	}else if(getoverallattack()-p2.getoveralldefence()>0){   //if  the attacker survives
+		select(getoverallattack()-p2.getoveralldefence());    //the attacker chooses which units he wants to lose
 		list<Personality*>::iterator it;
-		for(it = (p2.army).begin(); it != (p2.army).end();){
+		for(it = (p2.army).begin(); it != (p2.army).end();){     //destroy p2's army
 			if((*it)->istapped() == 0){
 				delete *it;
 				it = (p2.army).erase(it);
@@ -253,8 +253,8 @@ int Player::attack(Player& p2){
 				++it;
 			}
 		}
-		reducearmyhonour();
-		for(it=army.begin();it!=army.end();it++){
+		reducearmyhonour();    					//reduce the honour of the surviving units of the attacker's army and destroy those with 0 honour
+		for(it=army.begin();it!=army.end();it++){     //and also tap followers used and reduce the durability of the items by 1
 			if((*it)->istapped()==1){
 				list <GreenCard*>& copy=(*it)->getgl();
 				list <GreenCard*>::iterator it3;
@@ -267,12 +267,12 @@ int Player::attack(Player& p2){
 					}	
 				}
 			}
-			(*it)->removebrokenitem();	
+			(*it)->removebrokenitem();	  //remove items with 0 durability
 		}
 		attackarmy.clear();
-	}else if(getoverallattack()-p2.getoveralldefence()==0){
+	}else if(getoverallattack()-p2.getoveralldefence()==0){   //if it is a draw the destroy the attackers attack army and the defenders defence army
 		list<Personality*>::iterator it;
-		for(it=(p2.army).begin();it!=(p2.army).end();){
+		for(it=(p2.army).begin();it!=(p2.army).end();){   
 			if((*it)->istapped()==0){
 				delete *it;
 				it = p2.army.erase(it);
@@ -291,10 +291,10 @@ int Player::attack(Player& p2){
 		attackarmy.clear();
 		(p2.attackarmy).clear();
 		
-	}else{	
-		p2.select2(p2.getoveralldefence()-getoverallattack());
+	}else{														//else p2 survives and
+		p2.select2(p2.getoveralldefence()-getoverallattack());    //p2 must select units to lose
 		list<Personality*>::iterator it;
-		for(it=army.begin();it!=army.end();){
+		for(it=army.begin();it!=army.end();){    //destroy the attacker's army
 			if((*it)->istapped()==0){
 				delete *it;
 				it = army.erase(it);
@@ -302,29 +302,29 @@ int Player::attack(Player& p2){
 				++it;
 			}
 		}
-		p2.reducearmyhonour();
+		p2.reducearmyhonour();  //reduce the honour of p2's surviving units
 		attackarmy.clear();		
 	}
 }
 
-void Player::select(int dif){
+void Player::select(int dif){     //the function that lets the atacker select which units to lose
 	cout << "Please select personalities/followers to lose with overall attack >= than " << dif << endl;
 	cout << "[n] for nth personality, [n-m] for mth follower of nth personality" << endl;
 	bool finished=false;
 	int oa = 0;
 	list<Personality*>::iterator it2;
-	vector<Personality*> per;
+	vector<Personality*> per;					//we use a vector in order to make use of the vectors functions
 	for(it2=army.begin();it2!=army.end();it2++){
 		per.push_back(*(it2));
 	}
 	string selection;
 	while(!finished){
-		if(army.empty()){
+		if(army.empty()){						//if the army is empty then there is nothing to be done here
 			cout << "You have no army" << endl;
 			finished = true;
 			continue;
 		}
-		cout << "Your available options are:\n";
+		cout << "Your available options are:\n";  	//print available options
 		for(it2=army.begin();it2!=army.end();it2++){
 			(*it2)->print();
 			if((*it2)->isdead()==1)
@@ -332,14 +332,14 @@ void Player::select(int dif){
 			continue;
 		}
 		cin >> selection;
-		if(selection=="DONE" || selection=="done"){
-			vector <Personality*>::iterator it;
-			for(it=per.begin();it!=per.end();it++){
-				if((*it)->isdead()==1){
+		if(selection=="DONE" || selection=="done"){            //if the attacker is done   
+			vector <Personality*>::iterator it;    
+			for(it=per.begin();it!=per.end();it++){     //then calculate overall attack of sacrificed units
+				if((*it)->isdead()==1){          //by adding sacrificed personalities' attack
 					oa+=(*it)->getattack();
 					continue;
 				}
-				vector <Follower*> copy=(*it)->getfollowers();
+				vector <Follower*> copy=(*it)->getfollowers();   //and sacrificed followers' attack
 				vector <Follower*>::iterator it3;
 				for(it3=copy.begin();it3!=copy.end();it3++){
 					if((*it3)->isdead()==1){
@@ -347,13 +347,13 @@ void Player::select(int dif){
 					}
 				}
 			}
-			if(oa>=dif){
+			if(oa>=dif){               //if overall attack points are enough then
 				finished=true;
-				removedeadper();
-				for(it2=army.begin();it2!=army.end();it2++){
+				removedeadper();		//remove the dead personalities from the army
+				for(it2=army.begin();it2!=army.end();it2++){  //and also remove dead followers
 					(*it2)->unequipdeadfol();
 				}		
-			}else{
+			}else{                              //else  undo the changes and select again which units to lose
 				cout << "Not enough overall attack points,please select again from the beginning:\n";
 				vector <Personality*>::iterator it;
 				for(it=per.begin();it!=per.end();it++){
@@ -361,7 +361,7 @@ void Player::select(int dif){
 				}
 				continue;
 			}
-		}else if(selection.length()>1){
+		}else if(selection.length()>1){                        		//this is the case for selecting a follower of a personality
 			int i,j;
 			try{
 				i=stoi(selection.substr(0, selection.find("-")))-1;
@@ -385,8 +385,8 @@ void Player::select(int dif){
 				cout << "Invalid follower, already selected, please select another one" << endl;
 				continue;
 			}
-			per.at(i)->getfollowers().at(j)->setdead();
-		}else{	
+			per.at(i)->getfollowers().at(j)->setdead();         //if everything is ok then set that follower as dead
+		}else{	                     //case for selecting a personality 
 			int index;
 			try{
 				index =stoi(selection)-1;	
@@ -408,12 +408,12 @@ void Player::select(int dif){
 				cout << "Invalid personality, already selected, please select another one" << endl;
 				continue;
 			}
-			per.at(index)->setdead();
+			per.at(index)->setdead();  //if everything is ok then set that personality as dead
 		}
 	}
 }
 
-void Player::select2(int dif){
+void Player::select2(int dif){   //same as select but it is used when the defender survives,thus calculating overall defence
 	cout << "Please select personalities/followers to lose with overall defence >= than " << dif << endl;
 	cout << "[n] for nth personality, [n-m] for mth follower of nth personality" << endl;
 	bool finished=false;
@@ -558,10 +558,10 @@ void Player::removeFromHand(GreenCard *card){
 	hand.remove(card);
 }
 
-void Player::removedeadper(){
+void Player::removedeadper(){    //removes dead personalities
 	list<Personality *>::iterator it;
-	for(it = army.begin(); it != army.end();){
-		if((*it)->isdead()==1){
+	for(it = army.begin(); it != army.end();){   //search the army for dead personalities
+		if((*it)->isdead()==1){   //and if they are dead ,destroy them
 			delete *it;
 			it = army.erase(it);
 		}else{
@@ -570,7 +570,7 @@ void Player::removedeadper(){
 	}
 }
 
-int Player::tapHoldings(){
+int Player::tapHoldings(){    //function that taps holdings
 	vector<Holding *> vect;
 	list<Holding *>::iterator it;
 	for (it = holdings.begin(); it != holdings.end(); it++)
@@ -606,7 +606,7 @@ int Player::tapHoldings(){
 				cout << hold->getName() << " is already tapped" << endl;
 				continue;
 			}
-			cout << hold->getName() << " selected" << endl;
+			cout << hold->getName() << " selected" << endl;       //if everything is ok then inform theplayer about the choice he made and add harvest value to his income
 			cout << '(' << ++cards_selected << '/' << holdings.size() << ')' << endl; 
 			hold->tap();
 			income += hold->getHarvestValue();
@@ -615,7 +615,7 @@ int Player::tapHoldings(){
 	return income;
 }
 
-int Player::chooseProvince(int money){
+int Player::chooseProvince(int money){        			//function that gives the ability to a player to choose provinces
 	vector<BlackCard *> vect;
 	list<BlackCard *>::iterator it;
 	for (it = provinces.begin(); it != provinces.end(); it++)
@@ -632,8 +632,8 @@ int Player::chooseProvince(int money){
 			try{
 				int index = stoi(selection)-1;
 				try{
-					BlackCard *prov = vect.at(index);
-					if(prov->isrevealed() == 0){
+					BlackCard *prov = vect.at(index);    
+					if(prov->isrevealed() == 0){   
 						cout << "Province is hidden, please select another one" << endl;
 						continue;
 					}
@@ -641,17 +641,17 @@ int Player::chooseProvince(int money){
 						cout << "Can't afford " << prov->getName() << endl;
 						continue;
 					}
-					provinces.remove(prov);
-					drawDynastyCard();
+					provinces.remove(prov);     					//if everything is ok  remove the prvince and replace it with a hidden one
+					drawDynastyCard();                           
 					TypeConverter *conv = new TypeConverter();
 					Personality **per = new Personality *;
 					Holding **hold = new Holding *;
 					conv->getCorrectType(prov, per, hold);
 					if(*per){
-						army.push_back(*per);
-					}else if(*hold){
+						army.push_back(*per);         //if it is a personality add it to the army
+					}else if(*hold){                     
 						list<Holding *>::iterator h;
-						for(h = holdings.begin(); h != holdings.end(); h++){
+						for(h = holdings.begin(); h != holdings.end(); h++){		//else add it to the holdings and try connecting it
 							(*hold)->connect(*h);
 						}
 						holdings.push_back(*hold);
@@ -659,7 +659,7 @@ int Player::chooseProvince(int money){
 					delete(conv);
 					delete(per);
 					delete(hold);
-					return prov->getCost();
+					return prov->getCost();				//return the cost of the purchased province
 				}catch(out_of_range e){
 					cout << "Choose a valid card" << endl;
 					continue;
@@ -675,11 +675,11 @@ int Player::chooseProvince(int money){
 	}
 	return 0;
 }
-void Player::discardSurplusFateCards(){
-	if(hand.size() > maxCards){
+void Player::discardSurplusFateCards(){  			//function that lets a player discard surplus cards
+	if(hand.size() > maxCards){				//if player has more cards then discard a card
 		vector<GreenCard *> vect;
 		list<GreenCard *>::iterator it;
-		for (it = hand.begin(); it != hand.end(); it++)
+		for (it = hand.begin(); it != hand.end(); it++)			//we use the array because it is more practical
 			vect.push_back((*it));
 		bool finished = false;
 		string selection;
@@ -704,7 +704,7 @@ void Player::discardSurplusFateCards(){
 				cout << "Invalid input, try again" << endl;
 				continue;
 			}
-			cout << selected_card->getName() << " will be discarded" << endl;
+			cout << selected_card->getName() << " will be discarded" << endl;  //if everything is ok then remove that card
 			hand.remove(selected_card);
 			delete selected_card;
 			finished = true;
@@ -715,8 +715,8 @@ void Player::discardSurplusFateCards(){
 int Player::getMoney(){
 	return money;
 }
-
-void Player::reducearmyhonour(){
+  
+void Player::reducearmyhonour(){    //reduces syrviving units' honour and destroys them if their honour is 0
 	list <Personality*>::iterator it;
 	for(it=army.begin();it!=army.end();){
 		(*it)->reducehonour();
@@ -729,7 +729,7 @@ void Player::reducearmyhonour(){
 	}
 }
 
-void Player::drawDynastyCard(){
+void Player::drawDynastyCard(){                  //function that fills an empty province
 	cout << "Drawing Dynasty Card" << endl << endl;
 	provinces.push_back(deck->drawDynastyCard());
 }

@@ -117,13 +117,13 @@ int Personality::isdead(){
 	return 0;
 }
 
-void Personality::unequipdeadfol(){
-	list<GreenCard*>::iterator it;
-	for(it=gl.begin();it!=gl.end();){
-		if((*it)->getType()==ITEM){
+void Personality::unequipdeadfol(){     //removes dead followers
+	list<GreenCard*>::iterator it;		
+	for(it=gl.begin();it!=gl.end();){		//search equipment	
+		if((*it)->getType()==ITEM){		  //if it is an item then move on
 			continue;
 		}
-		if((*it)->isdead()==1){
+		if((*it)->isdead()==1){				//and if it is a follower destroy it
 			delete *it;
 			it = gl.erase(it);
 		}else{
@@ -199,11 +199,11 @@ list<GreenCard*>& Personality::getgl(){
 	return gl;
 }
 
-void Personality::removebrokenitem(){
+void Personality::removebrokenitem(){    //removes items with 0 durability
 	list<GreenCard*>::iterator it;
-	for(it=gl.begin();it!=gl.end();){
-		if((*it)->getType()==ITEM){
-			if((*it)->isbroken()==1){
+	for(it=gl.begin();it!=gl.end();){   //search the equipment
+		if((*it)->getType()==ITEM){     //if it is an ITEM
+			if((*it)->isbroken()==1){		//and it is broken then destroy it
 				delete *it;
 				it = gl.erase(it);
 			}else{
